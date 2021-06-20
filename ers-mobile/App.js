@@ -12,7 +12,7 @@ export default function App() {
   } else {
     return (
       <View style={styles.container}>
-        <StatusBar barStyle="light-content" />
+        <StatusBar barStyle="light-content" backgroundColor={"#32527B"} />
         <NavigationContainer>
           <AppStack />
         </NavigationContainer>
