@@ -1,11 +1,11 @@
 import React from "react";
 import { View, Text, StyleSheet, TouchableOpacity } from "react-native";
 import PageHeader from "../../../components/PageHeader";
-
+import { Ionicons } from "@expo/vector-icons";
 const PostEmergencyInfo = () => {
   return (
     <View style={styles.container}>
-      <PageHeader pageTitle={""} />
+      <PageHeader pageTitle={"Description"} />
       <View>
         <TouchableOpacity style={styles.card}>
           <View style={{ flexDirection: "row", alignItems: "center" }}>

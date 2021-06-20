@@ -1,4 +1,4 @@
-import React from "react";
+import React, { useState } from "react";
 import { View, Text, StyleSheet } from "react-native";
 import EmergencyItem from "../../../components/EmergencyItem";
 import PageHeader from "../../../components/PageHeader";
@@ -14,7 +14,11 @@ const PostEmergencyScreen = ({ navigation }) => {
       <PageHeader pageTitle={"Post Emergency"} searchHandler={openSearchBox} />
       <View style={{ paddingHorizontal: 10 }}>
         {showSearchBox ? (
-          <View></View>
+          <View
+            style={{ flex: 1, justifyContent: "center", alignItems: "center" }}
+          >
+            <Text>Search for an emergency around you</Text>
+          </View>
         ) : (
           <View>
             <FlatList
