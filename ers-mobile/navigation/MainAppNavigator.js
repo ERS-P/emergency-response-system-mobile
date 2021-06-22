@@ -6,12 +6,13 @@ import { FabTabBar } from "../components/BottomTab/FabTabBar";
 import HomeScreen from "../screens/MainApp/HomeScreen";
 import AccountScreen from "../screens/MainApp/AccountScreen/AccountScreen";
 import AuthNavigator from "./AuthNavigator";
-import PostEmergencyScreen from "../screens/MainApp/PostEmergency/PostEmergencyScreen";
 import EditProfile from "../screens/MainApp/EditProfile";
 import ChangePassword from "../screens/MainApp/ChangePassword";
 import NotificationScreen from "../screens/MainApp/NotificationScreen";
-// import PostEmergencyType from "../screens/MainApp/PostEmergency/PostEmergencyType";
+import PostEmergencyMap from "../screens/MainApp/PostEmergency/PostEmergencyMap";
+import PostEmergencyScreen from "../screens/MainApp/PostEmergency/PostEmergencyScreen";
 import PostEmergencyInfo from "../screens/MainApp/PostEmergency/PostEmergencyInfo";
+import PostEmergencySubmit from "../screens/MainApp/PostEmergency/PostEmergencySubmit.js";
 
 const tabBarIcon = (name) => ({ focused, color, size }) => (
   <MaterialCommunityIcons
@@ -38,6 +39,8 @@ const PostEmergencyStack = () => {
     <Stack.Navigator screenOptions={{ headerShown: false }}>
       <Stack.Screen name="post" component={PostEmergencyScreen} />
       <Stack.Screen name="info" component={PostEmergencyInfo} />
+      <Stack.Screen name="map" component={PostEmergencyMap} />
+      <Stack.Screen name="submit" component={PostEmergencySubmit} />
     </Stack.Navigator>
   );
 };

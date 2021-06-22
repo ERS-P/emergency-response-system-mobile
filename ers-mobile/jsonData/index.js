@@ -265,8 +265,8 @@ export const EmergencyData = [
 
   {
     id: 2,
-    title: "flood",
-    type: "Flood",
+    title: "Flood",
+    type: "flood",
     icon: require("../assets/images/main/flood.png"),
     color: "#5D88BB",
   },
@@ -293,8 +293,8 @@ export const EmergencyData = [
   },
   {
     id: 6,
-    title: "other",
-    type: "Other",
+    title: "Other",
+    type: "other",
     icon: require("../assets/images/main/alert.png"),
     color: "#5D88BB",
   },

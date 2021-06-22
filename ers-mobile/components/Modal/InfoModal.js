@@ -15,7 +15,7 @@ import {
 import AsyncStorage from "@react-native-async-storage/async-storage";
 import Comments from "./Comments";
 import renderIf from "../renderIf";
-import {data} from "../../jsonData/index"
+import { data } from "../../jsonData/index";
 import { Ionicons } from "@expo/vector-icons";
 
 const deviceWidth = Dimensions.get("window").width;
@@ -359,7 +359,7 @@ export default class InfoModal extends Component {
             style={{
               flexDirection: "row",
               paddingBottom: 20,
-              justifyContent: "space-around",    
+              justifyContent: "space-around",
             }}
           >
             <View style={{ flexDirection: "row" }}>

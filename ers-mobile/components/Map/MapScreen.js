@@ -60,8 +60,8 @@ export default class MapScreen extends Component {
       region: {
         latitude: location.coords.latitude,
         longitude: location.coords.longitude,
-        latitudeDelta: 0.1,
-        longitudeDelta: 0.1,
+        latitudeDelta: 0.3,
+        longitudeDelta: 0.3,
       },
     });
   };
@@ -110,15 +110,11 @@ export default class MapScreen extends Component {
       {
         markers: data,
       },
-      function () {
-        // console.log(this.state.markers);
-        // this.addGeocoding(this.state.markers);
-      }
+      function () {}
     );
 
     setTimeout(
       function () {
-        //Start the timer
         this.setState({ loaded: true });
       }.bind(this),
       2000
@@ -166,8 +162,8 @@ export default class MapScreen extends Component {
               region={{
                 latitude: this.state.region.latitude,
                 longitude: this.state.region.longitude,
-                latitudeDelta: 0.1,
-                longitudeDelta: 0.1,
+                latitudeDelta: 0.15,
+                longitudeDelta: 0.15,
               }}
               initialRegion={this.state.userlocation}
               userLocationAnnotationTitle={""}

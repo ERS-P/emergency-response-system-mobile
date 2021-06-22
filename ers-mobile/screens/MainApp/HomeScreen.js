@@ -24,8 +24,8 @@ const ROUTESTACK = [
 ];
 
 const defaultRegion = {
-  latitude: 37.809489,
-  longitude: -122.476551,
+  latitude: 5.614818,
+  longitude: -0.205874,
   latitudeDelta: 0.004,
   longitudeDelta: 0.004,
 };

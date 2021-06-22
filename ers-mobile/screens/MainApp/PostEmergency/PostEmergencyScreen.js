@@ -1,5 +1,5 @@
 import React, { useState } from "react";
-import { View, Text, StyleSheet } from "react-native";
+import { View, Text, StyleSheet, FlatList } from "react-native";
 import EmergencyItem from "../../../components/EmergencyItem";
 import PageHeader from "../../../components/PageHeader";
 import { EmergencyData } from "../../../jsonData/index";
@@ -15,16 +15,23 @@ const PostEmergencyScreen = ({ navigation }) => {
       <View style={{ paddingHorizontal: 10 }}>
         {showSearchBox ? (
           <View
-            style={{ flex: 1, justifyContent: "center", alignItems: "center" }}
+            style={{
+              flex: 1,
+              justifyContent: "center",
+              alignItems: "center",
+              marginTop: 50,
+            }}
           >
-            <Text>Search for an emergency around you</Text>
+            <Text style={{ fontFamily: "Poppins-Regular" }}>
+              Search for an emergency around you
+            </Text>
           </View>
         ) : (
           <View>
             <FlatList
               numColumns={2}
               data={EmergencyData}
-              renderItem={(item) => (
+              renderItem={({ item }) => (
                 <EmergencyItem item={item} navigation={navigation} />
               )}
               keyExtractor={(item) => String(item.id)}

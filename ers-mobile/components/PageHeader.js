@@ -32,7 +32,7 @@ export default function PageHeader({ pageTitle, searchHandler }) {
           <Text
             style={{
               fontSize: 22,
-              fontFamily: "Questrial-Regular",
+              fontFamily: "Poppins-Regular",
               color: "#ffffff",
             }}
           >

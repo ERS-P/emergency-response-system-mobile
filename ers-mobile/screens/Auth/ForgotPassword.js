@@ -78,7 +78,7 @@ export default class ForgotPassword extends Component {
               style={{
                 fontSize: 15,
                 textAlign: "center",
-                marginBottom: 10,
+                marginBottom: 2,
                 fontFamily: "Poppins-Regular",
               }}
             >
@@ -106,10 +106,11 @@ const styles = StyleSheet.create({
     flex: 1.2,
   },
   header: {
-    fontSize: 28,
+    fontSize: 25,
     color: "#32527B",
-    fontWeight: "bold",
-    marginVertical: 30,
+    fontWeight: "500",
+    marginTop: 30,
+    marginBottom: 10,
     fontFamily: "Poppins-Regular",
   },
   footer: {
@@ -124,7 +125,7 @@ const styles = StyleSheet.create({
     width: "100%",
     borderRadius: 25,
     paddingVertical: 15,
-    marginTop: 35,
+    marginTop: 15,
   },
   btnText: {
     fontSize: 12,

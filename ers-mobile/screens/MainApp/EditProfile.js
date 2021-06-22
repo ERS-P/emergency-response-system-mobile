@@ -50,7 +50,7 @@ export default class EditProfile extends Component {
       if (this.state.validForm) {
         Keyboard.dismiss();
         this.pagerRef.current.setPage(pageNumber);
-        this.resetUserInputs();
+        // this.resetUserInputs();
       }
     };
 
@@ -58,8 +58,7 @@ export default class EditProfile extends Component {
       this.getFormValidation({ obj: "authInputs" });
       if (this.state.validForm) {
         Keyboard.dismiss();
-
-        this.resetUserInputs();
+        // this.resetUserInputs();
       }
     };
 
@@ -238,9 +237,9 @@ const styles = StyleSheet.create({
     flex: 1.2,
   },
   header: {
-    fontSize: 28,
+    fontSize: 25,
     color: "#32527B",
-    fontWeight: "bold",
+    fontWeight: "500",
     marginVertical: 5,
     fontFamily: "Poppins-Regular",
   },
@@ -255,6 +254,7 @@ const styles = StyleSheet.create({
     padding: 10,
     width: "45%",
     borderRadius: 20,
+    marginTop: 15,
   },
   btnText: {
     fontSize: 12,

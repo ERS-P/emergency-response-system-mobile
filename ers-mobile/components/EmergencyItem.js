@@ -1,5 +1,5 @@
 import React from "react";
-import { View, Text, StyleSheet, TouchableOpacity } from "react-native";
+import { View, Text, StyleSheet, TouchableOpacity, Image } from "react-native";
 
 const EmergencyItem = ({ item, navigation }) => {
   return (
@@ -19,17 +19,18 @@ const EmergencyItem = ({ item, navigation }) => {
             }}
           />
         </View>
-        <View style={{ flexDirection: "row" }}>
+        <View style={{ flexDirection: "row", alignSelf: "center" }}>
           <Text
             style={{
-              fontSize: 13,
+              fontSize: 16,
               fontWeight: "bold",
               color: "#FFFFFF",
               marginTop: 10,
+              textAlign: "center",
               fontFamily: "Poppins-Regular",
             }}
           >
-            {item.type}
+            {item.title}
           </Text>
         </View>
       </View>

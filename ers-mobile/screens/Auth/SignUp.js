@@ -6,7 +6,7 @@ import {
   Image,
   TouchableOpacity,
   Keyboard,
-  TouchableWithoutFeedback
+  TouchableWithoutFeedback,
 } from "react-native";
 import PagerView from "react-native-pager-view";
 import FormInput from "../../components/FormInput";
@@ -483,8 +483,9 @@ const styles = StyleSheet.create({
   header: {
     fontSize: 25,
     color: "#32527B",
-    fontWeight: "bold",
-    marginVertical: 20,
+    fontWeight: "500",
+    marginTop: 30,
+    marginBottom: 10,
     fontFamily: "Poppins-Regular",
   },
   footer: {

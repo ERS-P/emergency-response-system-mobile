@@ -144,10 +144,11 @@ const styles = StyleSheet.create({
     flex: 1.2,
   },
   header: {
-    fontSize: 28,
+    fontSize: 25,
     color: "#32527B",
-    fontWeight: "bold",
-    marginVertical: 10,
+    fontWeight: "500",
+    marginTop: 25,
+    marginBottom: 10,
     fontFamily: "Poppins-Regular",
   },
   footer: {

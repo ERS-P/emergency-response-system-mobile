@@ -66,7 +66,7 @@ export default class SignIn extends Component {
           />
         </View>
         <View style={styles.footer}>
-          <Text style={styles.header}>SignIn</Text>
+          <Text style={styles.header}>Login into Your Account</Text>
           <View style={{ marginHorizontal: 6 }}>
             <FormInput
               textColor="#000"
@@ -192,10 +192,11 @@ const styles = StyleSheet.create({
     flex: 1.2,
   },
   header: {
-    fontSize: 28,
+    fontSize: 25,
     color: "#32527B",
-    fontWeight: "bold",
-    marginVertical: 30,
+    fontWeight: "500",
+    marginTop: 40,
+    marginBottom: 5,
     fontFamily: "Poppins-Regular",
   },
   footer: {
