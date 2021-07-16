@@ -327,3 +327,57 @@ export const CategoryData = [
     color: "#32527B",
   },
 ];
+
+export const todayNotificationData = [
+  {
+    id: 1,
+    title: "Fire is uncontrallable but very dangerous",
+    timestamp: "15 minutes ago",
+    category: "Fire",
+  },
+  {
+    id: 2,
+    title: "Fire is uncontrallable but very dangerous",
+    timestamp: "15 minutes ago",
+    category: "Flood",
+  },
+  {
+    id: 3,
+    title: "Fire is uncontrallable but very dangerous",
+    timestamp: "15 minutes ago",
+    category: "Fire",
+  },
+  {
+    id: 4,
+    title: "Fire is uncontrallable but very dangerous",
+    timestamp: "15 minutes ago",
+    category: "Fire",
+  },
+];
+
+export const yesterdayNotificationData = [
+  {
+    id: 1,
+    title: "Fire is uncontrallable but very dangerous",
+    timestamp: "15 minutes ago",
+    category: "Fire",
+  },
+  {
+    id: 2,
+    title: "Fire is uncontrallable but very dangerous",
+    timestamp: "15 minutes ago",
+    category: "Flood",
+  },
+  {
+    id: 3,
+    title: "Fire is uncontrallable but very dangerous",
+    timestamp: "15 minutes ago",
+    category: "Fire",
+  },
+  {
+    id: 4,
+    title: "Fire is uncontrallable but very dangerous",
+    timestamp: "15 minutes ago",
+    category: "Fire",
+  },
+];

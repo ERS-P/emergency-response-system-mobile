@@ -260,6 +260,27 @@ export function getMyPosts(userId) {
   return count;
 }
 
+export function changePassword(oldpassword, newpassword, confirmPassword) {
+  firebase
+    .database()
+    .ref("users/" + userId)
+    .update({
+      password: newpassword,
+      confirmPassword: confirmPassword,
+    });
+}
+
+export function editProfile(){}
+
+export function getProfile() {
+  firebase.auth().onAuthStateChanged(function (user) {
+    if (user) {
+      return user;
+    }
+    return false;
+  });
+}
+
 export function removePosts(postId) {
   firebase
     .database()

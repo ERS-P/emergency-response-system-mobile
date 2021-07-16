@@ -47,6 +47,7 @@ class PostEmergencyInfo extends Component {
     }
   };
 
+
   render() {
     const dataItems = [
       { id: 1, title: "YES", val: true },

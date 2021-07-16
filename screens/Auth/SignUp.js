@@ -174,6 +174,7 @@ export default class SignUp extends Component {
               <FormInput
                 mode="outlined"
                 returnKeyType={"done"}
+                style={{ marginTop: -5 }}
                 placeholder="State License"
                 onChangeText={(value) => this.setState({ stateLicense: value })}
                 ref={(input) => {
@@ -181,42 +182,6 @@ export default class SignUp extends Component {
                 }}
                 value={this.state.stateLicense}
               />
-
-              <Picker
-                style={{
-                  borderWidth: 1,
-                  borderColor: "#fff",
-                  alignSelf: "center",
-                  borderRadius: 20,
-                  paddingVertical: 5,
-                  width: "90%",
-                  marginVertical: 4,
-                  backgroundColor: "#d2d2d2",
-                  fontSize: 16,
-                  color: "gray",
-                  shadowColor: "#000",
-                  shadowOffset: {
-                    width: 0,
-                    height: 2,
-                  },
-                }}
-                onValueChange={(itemValue) => {
-                  this.setState({ department: itemValue });
-                }}
-                selectedValue={this.state.department}
-              >
-                <Picker.Item value="" label="Select your department" />
-                {dataItems.map((item) => {
-                  return (
-                    <Picker.Item
-                      label={item.title}
-                      value={item.val}
-                      key={item.id}
-                    />
-                  );
-                })}
-              </Picker>
-
               <FormInput
                 mode="outlined"
                 returnKeyType={"done"}
@@ -227,6 +192,48 @@ export default class SignUp extends Component {
                 }}
                 value={this.state.branch}
               />
+              <View
+                style={{
+                  flexDirection: "row",
+                  marginHorizontal: 10,
+                  marginTop: 10,
+                }}
+              >
+                <View>
+                  <Text style={{ fontSize: 16, fontFamily: "Poppins-Regular" }}>
+                    Department
+                  </Text>
+                </View>
+                <View style={{ backgroundColor: "#F2F2F2" }}>
+                  <Picker
+                    style={{
+                      width: 200,
+                      height: 30,
+                      paddingVertical: 10,
+                      paddingHorizontal: 2,
+                      borderRadius: 10,
+                      marginLeft: 30,
+                      borderRadius: 8,
+                      backgroundColor: "#F2F2F2",
+                    }}
+                    onValueChange={(itemValue) => {
+                      this.setState({ department: itemValue });
+                    }}
+                    selectedValue={this.state.department}
+                  >
+                    <Picker.Item value="" label="Select your department" />
+                    {dataItems.map((item) => {
+                      return (
+                        <Picker.Item
+                          label={item.title}
+                          value={item.val}
+                          key={item.id}
+                        />
+                      );
+                    })}
+                  </Picker>
+                </View>
+              </View>
             </View>
           </ScrollView>
         </KeyboardAvoidingView>
@@ -299,6 +306,26 @@ export default class SignUp extends Component {
                         height: 150,
                       }}
                     />
+                    <View style={{ marginTop: 40 }}>
+                      <Image
+                        source={require("../../assets/images/app_logo1.png")}
+                        style={{
+                          width: 150,
+                          height: 80,
+                        }}
+                      />
+                      <Text
+                        style={{
+                          fontWeight: "500",
+                          textAlign: "center",
+                          color: "#FFFFFF",
+                          fontFamily: "Poppins-Regular",
+                          fontSize: 18,
+                        }}
+                      >
+                        ALERT GHANA
+                      </Text>
+                    </View>
                   </View>
                   <View style={styles.footer}>
                     <ScrollView showsVerticalScrollIndicator={false}>
@@ -442,6 +469,26 @@ export default class SignUp extends Component {
                         height: 150,
                       }}
                     />
+                    <View style={{ marginTop: 40 }}>
+                      <Image
+                        source={require("../../assets/images/app_logo1.png")}
+                        style={{
+                          width: 150,
+                          height: 80,
+                        }}
+                      />
+                      <Text
+                        style={{
+                          fontWeight: "500",
+                          textAlign: "center",
+                          color: "#FFFFFF",
+                          fontFamily: "Poppins-Regular",
+                          fontSize: 18,
+                        }}
+                      >
+                        ALERT GHANA
+                      </Text>
+                    </View>
                   </View>
                   <View style={styles.footer}>
                     <Text style={styles.header}>SignUp</Text>
@@ -532,84 +579,115 @@ export default class SignUp extends Component {
                         height: 150,
                       }}
                     />
-                  </View>
-                  <View style={styles.footer}>
-                    <Text style={styles.header}>SignUp</Text>
-
-                    <View style={{ marginHorizontal: 6 }}>
-                      <FormInput
-                        textColor="#000"
-                        borderColor="#000"
-                        placeholder="National ID"
-                        activeBorderColor="#000"
-                        error={this.renderError(
-                          "authInputs",
-                          "nationalID",
-                          "name"
-                        )}
-                        returnKeyType={"next"}
-                        value={authInputs.nationalID.value}
-                        onChangeText={(value) => {
-                          this.onInputChange({
-                            field: "nationalID",
-                            value,
-                            obj: "authInputs",
-                          });
-                        }}
-                      />
-
-                      <CheckBox
-                        style={{ padding: 10 }}
-                        onClick={() => {
-                          this.setState({
-                            responder: !this.state.responder,
-                          });
-                        }}
-                        isChecked={this.state.responder}
-                        rightText={
-                          "Are you a police officer, firefigher, paramedic, or first responder?"
-                        }
-                      />
-
-                      {this.renderresponderSection()}
-                      <View
+                    <View style={{ marginTop: 40 }}>
+                      <Image
+                        source={require("../../assets/images/app_logo1.png")}
                         style={{
-                          flexDirection: "row",
-                          marginTop: 20,
-                          justifyContent: "space-around",
+                          width: 150,
+                          height: 80,
+                        }}
+                      />
+                      <Text
+                        style={{
+                          fontWeight: "500",
+                          textAlign: "center",
+                          color: "#FFFFFF",
+                          fontFamily: "Poppins-Regular",
+                          fontSize: 18,
                         }}
                       >
-                        <TouchableOpacity
-                          style={[
-                            styles.btn,
-                            { borderWidth: 1, borderColor: "#32527B" },
-                          ]}
-                          onPress={() => handlePress(1)}
-                        >
-                          <Text style={[styles.btnText, { color: "#32527B" }]}>
-                            Back
-                          </Text>
-                        </TouchableOpacity>
-                        <TouchableOpacity
-                          style={[styles.btn, { backgroundColor: "#32527B" }]}
-                          onPress={() => handleDone()}
-                        >
-                          {this.state.loading === false ? (
-                            <Text
-                              style={[styles.btnText, { color: "#FFFFFF" }]}
-                            >
-                              Proceed
-                            </Text>
-                          ) : (
-                            <Text
-                              style={[styles.btnText, { color: "#FFFFFF" }]}
-                            >
-                              Please wait...
-                            </Text>
-                          )}
-                        </TouchableOpacity>
-                      </View>
+                        ALERT GHANA
+                      </Text>
                     </View>
+                  </View>
+                  <View style={styles.footer}>
+                    <ScrollView showsVerticalScrollIndicator={false}>
+                      <Text style={styles.header}>SignUp</Text>
+                      <KeyboardAvoidingView
+                        style={{ flex: 1 }}
+                        behavior="padding"
+                      >
+                        <View style={{ marginHorizontal: 6 }}>
+                          <FormInput
+                            textColor="#000"
+                            borderColor="#000"
+                            placeholder="National ID"
+                            activeBorderColor="#000"
+                            error={this.renderError(
+                              "authInputs",
+                              "nationalID",
+                              "name"
+                            )}
+                            returnKeyType={"next"}
+                            value={authInputs.nationalID.value}
+                            onChangeText={(value) => {
+                              this.onInputChange({
+                                field: "nationalID",
+                                value,
+                                obj: "authInputs",
+                              });
+                            }}
+                          />
+
+                          <CheckBox
+                            style={{ padding: 10 }}
+                            onClick={() => {
+                              this.setState({
+                                responder: !this.state.responder,
+                              });
+                            }}
+                            isChecked={this.state.responder}
+                            rightText={
+                              "Are you a police officer, firefigher, paramedic, or first responder?"
+                            }
+                          />
+
+                          {this.renderresponderSection()}
+                          <View
+                            style={{
+                              flexDirection: "row",
+                              marginTop: 20,
+                              justifyContent: "space-around",
+                            }}
+                          >
+                            <TouchableOpacity
+                              style={[
+                                styles.btn,
+                                { borderWidth: 1, borderColor: "#32527B" },
+                              ]}
+                              onPress={() => handlePress(1)}
+                            >
+                              <Text
+                                style={[styles.btnText, { color: "#32527B" }]}
+                              >
+                                Back
+                              </Text>
+                            </TouchableOpacity>
+                            <TouchableOpacity
+                              style={[
+                                styles.btn,
+                                { backgroundColor: "#32527B" },
+                              ]}
+                              onPress={() => handleDone()}
+                            >
+                              {this.state.loading === false ? (
+                                <Text
+                                  style={[styles.btnText, { color: "#FFFFFF" }]}
+                                >
+                                  Proceed
+                                </Text>
+                              ) : (
+                                <Text
+                                  style={[styles.btnText, { color: "#FFFFFF" }]}
+                                >
+                                  Please wait...
+                                </Text>
+                              )}
+                            </TouchableOpacity>
+                          </View>
+                        </View>
+                      </KeyboardAvoidingView>
+                    </ScrollView>
                   </View>
                 </View>
               </View>
@@ -633,13 +711,14 @@ const styles = StyleSheet.create({
   },
   topSection: {
     flex: 1.2,
+    flexDirection: "row",
   },
   header: {
     fontSize: 25,
     color: "#32527B",
     fontWeight: "500",
     marginTop: 30,
-    marginBottom: 10,
+    marginBottom: 2,
     fontFamily: "Poppins-Regular",
   },
   footer: {
