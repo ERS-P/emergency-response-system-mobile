@@ -61,7 +61,7 @@ export default class SignUp extends Component {
       department: "",
       validForm: true,
       loading: false,
-      responder: false,
+
       token: "",
     };
     this.pagerRef = React.createRef();
@@ -118,7 +118,8 @@ export default class SignUp extends Component {
         confirmPassword: authInputs.confirmPassword.value,
         nationalID: authInputs.nationalID.value,
         stateLicense: authInputs.stateLicense.value,
-        responder: this.state.responder,
+        branch: this.state.branch,
+        department: this.state.department,
         token: this.state.token,
       };
 
@@ -166,9 +167,8 @@ export default class SignUp extends Component {
                   fontFamily: "Poppins-Regular",
                 }}
               >
-                If you are a Paramedic,Law Enforcement, Firefighter, emergency
-                response agency, or any other responder, please provide your
-                state license.
+                If you are a paramedic,law enforcement, firefighter please fill
+                this section
               </Text>
 
               <FormInput
@@ -192,28 +192,27 @@ export default class SignUp extends Component {
                 }}
                 value={this.state.branch}
               />
-              <View
+              <TouchableOpacity
                 style={{
                   flexDirection: "row",
                   marginHorizontal: 10,
-                  marginTop: 10,
+                  marginTop: 15,
                 }}
               >
-                <View>
+                <View style={{ marginTop: 8 }}>
                   <Text style={{ fontSize: 16, fontFamily: "Poppins-Regular" }}>
-                    Department
+                     Department
                   </Text>
                 </View>
-                <View style={{ backgroundColor: "#F2F2F2" }}>
+                <View style={{ backgroundColor: "#F2F2F2", borderRadius: 20 }}>
                   <Picker
                     style={{
-                      width: 200,
-                      height: 30,
-                      paddingVertical: 10,
-                      paddingHorizontal: 2,
+                      width: 170,
+                      height: 39,
+                      paddingVertical: 15,
                       borderRadius: 10,
                       marginLeft: 30,
-                      borderRadius: 8,
+
                       backgroundColor: "#F2F2F2",
                     }}
                     onValueChange={(itemValue) => {
@@ -233,7 +232,7 @@ export default class SignUp extends Component {
                     })}
                   </Picker>
                 </View>
-              </View>
+              </TouchableOpacity>
             </View>
           </ScrollView>
         </KeyboardAvoidingView>

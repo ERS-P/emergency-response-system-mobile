@@ -16,7 +16,7 @@ const NotificationItem = ({ item }) => {
         <View style={{ flexDirection: "column" }}>
           <Text
             style={{
-              fontSize: 16,
+              fontSize: 15,
               fontFamily: "Poppins-Regular",
             }}
           >
@@ -26,8 +26,8 @@ const NotificationItem = ({ item }) => {
             <Text
               style={{
                 color: "#444444",
-                fontSize: 14,
-                fontFamily: "Poppins-Regular",
+                fontSize: 13,
+                fontFamily: "Poppins-Light",
               }}
             >
               {item.category}
@@ -35,7 +35,7 @@ const NotificationItem = ({ item }) => {
           </View>
         </View>
         <View>
-          <Text style={{ fontSize: 12 }}>{item.timestamp}</Text>
+          <Text style={{ fontSize: 10 }}>{item.timestamp}</Text>
         </View>
       </View>
     </TouchableOpacity>

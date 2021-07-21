@@ -26,7 +26,8 @@ export function createUser({
   confirmPassword,
   nationalID,
   stateLicense,
-  responder,
+  branch,
+  department,
   token,
 }) {
   firebase
@@ -48,7 +49,8 @@ export function createUser({
           stateLicense: stateLicense,
           confirmPassword: confirmPassword,
           numPosts: 0,
-          firstresponderlicense: responder,
+          branch:branch,
+          department:department,
           token: token,
         });
       firebase

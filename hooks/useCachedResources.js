@@ -17,6 +17,7 @@ export default function useCachedResources() {
           ...Ionicons.font,
           "space-mono": require("../assets/fonts/SpaceMono-Regular.ttf"),
           "Poppins-Regular": require("../assets/fonts/Poppins/Poppins-Regular.ttf"),
+          "Poppins-Light": require("../assets/fonts/Poppins/Poppins-Light.ttf"),
         });
       } catch (e) {
         // We might want to provide this error information to an error reporting service
