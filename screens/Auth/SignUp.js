@@ -315,7 +315,7 @@ export default class SignUp extends Component {
                       />
                       <Text
                         style={{
-                          fontWeight: "500",
+                          fontWeight: "800",
                           textAlign: "center",
                           color: "#FFFFFF",
                           fontFamily: "Poppins-Regular",

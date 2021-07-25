@@ -7,7 +7,7 @@ import { data } from "../../jsonData/index";
 import { AntDesign } from "@expo/vector-icons";
 
 const markerImages = {
-  flood: require("../../assets/images/main/flood.png"),
+  flood: require("../../assets/images/types/flood.png"),
   fire: require("../../assets/images/main/fire.png"),
   other: require("../../assets/images/main/alert.png"),
 };

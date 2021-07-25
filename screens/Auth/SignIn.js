@@ -119,6 +119,26 @@ export default class SignIn extends Component {
                   height: 165,
                 }}
               />
+              <View style={{ marginTop: 40 }}>
+                <Image
+                  source={require("../../assets/images/app_logo1.png")}
+                  style={{
+                    width: 150,
+                    height: 80,
+                  }}
+                />
+                <Text
+                  style={{
+                    fontWeight: "800",
+                    textAlign: "center",
+                    color: "#FFFFFF",
+                    fontFamily: "Poppins-Regular",
+                    fontSize: 18,
+                  }}
+                >
+                  ALERT GHANA
+                </Text>
+              </View>
             </View>
             <View style={styles.footer}>
               <ScrollView showsVerticalScrollIndicator={false}>

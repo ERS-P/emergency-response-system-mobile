@@ -16,7 +16,7 @@ import {
   Icon,
 } from "./styles";
 import { logout } from "../../../api/auth";
-import AsyncStorage from "@react-native-async-storage/async-storage";
+// import AsyncStorage from "@react-native-async-storage/async-storage";
 
 export default class AccountScreen extends Component {
   constructor(props) {
@@ -25,7 +25,6 @@ export default class AccountScreen extends Component {
     this.handleSignOut = this.handleSignOut.bind(this);
   }
 
-  compon;
   handleSignOut() {
     Alert.alert("Logout", "Are you sure you want to logout", [
       { text: "No", onPress: () => console.log("No Pressed"), style: "cancel" },

@@ -12,8 +12,8 @@ const EmergencyItem = ({ item, navigation }) => {
           <Image
             source={item.icon}
             style={{
-              width: 70,
-              height: 70,
+              width: 60,
+              height: 60,
               marginTop: 15,
               alignSelf: "center",
             }}
