@@ -2,6 +2,7 @@ import React, { Component } from "react";
 import { StyleSheet, View, Text, Image, TouchableOpacity } from "react-native";
 import FormInput from "../../components/FormInput";
 import { validationService } from "../../util/validation";
+import { changePassword } from "../../api/auth";
 
 export default class ChangePassword extends Component {
   constructor(props) {

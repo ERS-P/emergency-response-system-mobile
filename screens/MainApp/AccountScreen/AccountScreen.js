@@ -15,13 +15,15 @@ import {
   Title,
   Icon,
 } from "./styles";
-import { logout } from "../../../api/auth";
+import { logout , getProfile} from "../../../api/auth";
 // import AsyncStorage from "@react-native-async-storage/async-storage";
 
 export default class AccountScreen extends Component {
   constructor(props) {
     super(props);
-  
+    this.state={
+      user:getProfile()
+    }
     this.handleSignOut = this.handleSignOut.bind(this);
   }
 

@@ -7,12 +7,10 @@ import {
   Image,
   TextInput,
   ScrollView,
-  Picker,
 } from "react-native";
 import * as ImagePicker from "expo-image-picker";
-// import RNPickerSelect from "react-native-picker-select";
-// import ImagePicker from "react-native-image-picker";
 import PageHeader from "../../../components/PageHeader";
+import { RadioButton } from "react-native-paper";
 import { Ionicons, Fontisto } from "@expo/vector-icons";
 
 class PostEmergencyInfo extends Component {
@@ -21,24 +19,24 @@ class PostEmergencyInfo extends Component {
     this.state = {
       LocalImage: null,
       renderphoto: false,
-      damages: "",
+      damages: true,
       description: "",
       type: this.props.route.params.type,
     };
   }
-
   _pickImage = async () => {
-    
     this.setState({
       mode: false,
     });
+    // Ask the user for the permission to access the camera
+    const permissionResult = await ImagePicker.requestCameraPermissionsAsync();
 
-    let result = await ImagePicker.launchImageLibraryAsync({
-      mediaTypes: ImagePicker.MediaTypeOptions.All,
-      allowsEditing: true,
-      aspect: [4, 3],
-      quality: 1,
-    });
+    if (permissionResult.granted === false) {
+      alert("You've refused to allow this appp to access your camera!");
+      return;
+    }
+
+    const result = await ImagePicker.launchCameraAsync();
 
     if (!result.cancelled) {
       this.setState({
@@ -47,12 +45,30 @@ class PostEmergencyInfo extends Component {
     }
   };
 
+  // _pickImage = async () => {
+  //   this.setState({
+  //     mode: false,
+  //   });
+
+  //   let result = await ImagePicker.launchImageLibraryAsync({
+  //     mediaTypes: ImagePicker.MediaTypeOptions.All,
+  //     allowsEditing: true,
+  //     aspect: [4, 3],
+  //     quality: 1,
+  //   });
+
+  //   if (!result.cancelled) {
+  //     this.setState({
+  //       LocalImage: result.uri,
+  //     });
+  //   }
+  // };
 
   render() {
-    const dataItems = [
-      { id: 1, title: "YES", val: true },
-      { id: 2, title: "NO", val: false },
-    ];
+    // const dataItems = [
+    //   { id: 1, title: "YES", val: true },
+    //   { id: 2, title: "NO", val: false },
+    // ];
 
     return (
       <View style={styles.container}>
@@ -70,8 +86,48 @@ class PostEmergencyInfo extends Component {
                 <Text style={styles.cardText}>Human Damages</Text>
               </View>
 
-              <View>
-                <Picker
+              <View style={{ flexDirection: "row" }}>
+                <View style={{ flexDirection: "row" }}>
+                  <RadioButton
+                    label="YES"
+                    value="YES"
+                    color="#000000"
+                    status={
+                      this.state.damages === true ? "checked" : "unchecked"
+                    }
+                    onPress={() => this.setState({ damages: true })}
+                  />
+                  <Text
+                    style={{
+                      fontSize: 18,
+                      fontFamily: "Poppins-Regular",
+                      marginTop: 5,
+                    }}
+                  >
+                    YES
+                  </Text>
+                </View>
+                <View style={{ flexDirection: "row" }}>
+                  <RadioButton
+                    value="NO"
+                    color="#000000"
+                    status={
+                      this.state.damages === false ? "checked" : "unchecked"
+                    }
+                    onPress={() => this.setState({ damages: false })}
+                  />
+                  <Text
+                    style={{
+                      fontSize: 18,
+                      fontFamily: "Poppins-Regular",
+                      textAlign: "center",
+                      marginTop: 5,
+                    }}
+                  >
+                    NO
+                  </Text>
+                </View>
+                {/* <Picker
                   style={{
                     width: 70,
                     height: 40,
@@ -93,7 +149,7 @@ class PostEmergencyInfo extends Component {
                       />
                     );
                   })}
-                </Picker>
+                </Picker> */}
               </View>
             </View>
             <TouchableOpacity style={styles.card} onPress={this._pickImage}>

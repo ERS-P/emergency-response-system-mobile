@@ -263,9 +263,11 @@ export function getMyPosts(userId) {
 }
 
 export function changePassword(oldpassword, newpassword, confirmPassword) {
+  const userID=AsyncStorage.getItem("userID");
+  
   firebase
     .database()
-    .ref("users/" + userId)
+    .ref("users/" + userID)
     .update({
       password: newpassword,
       confirmPassword: confirmPassword,
