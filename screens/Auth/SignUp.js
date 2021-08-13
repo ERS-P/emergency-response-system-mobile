@@ -10,9 +10,11 @@ import {
   KeyboardAvoidingView,
   ScrollView,
   Picker,
+  TextInput,
 } from "react-native";
 import PagerView from "react-native-pager-view";
 import FormInput from "../../components/FormInput";
+import { RadioButton } from "react-native-paper";
 import { validationService } from "../../util/validation";
 import CheckBox from "react-native-check-box";
 import { createUser } from "../../api/auth";
@@ -56,12 +58,26 @@ export default class SignUp extends Component {
           type: "genericRequired",
           value: "",
         },
+        height: {
+          type: "genericRequired",
+          value: "",
+        },
+        weight: {
+          type: "genericRequired",
+          value: "",
+        },
+        branch: { type: "genericRequired", value: "" },
+       
       },
-      branch: "",
-      department: "",
+       department: "",
       validForm: true,
-      loading: false,
 
+      loading: false,
+      status: "",
+      chronic: false,
+      allergies: false,
+      respiratory: "",
+      responder: false,
       token: "",
     };
     this.pagerRef = React.createRef();
@@ -108,7 +124,8 @@ export default class SignUp extends Component {
     this.getFormValidation({ obj: "authInputs" });
     if (this.state.validForm) {
       Keyboard.dismiss();
-      const { authInputs } = this.state;
+      const { authInputs, branch, department, responder, token } = this.state;
+
       const user = {
         first_name: authInputs.first_name.value,
         last_name: authInputs.last_name.value,
@@ -118,9 +135,10 @@ export default class SignUp extends Component {
         confirmPassword: authInputs.confirmPassword.value,
         nationalID: authInputs.nationalID.value,
         stateLicense: authInputs.stateLicense.value,
-        branch: this.state.branch,
-        department: this.state.department,
-        token: this.state.token,
+        branch: authInputs.branch.value,
+        department: department,
+        responder: responder,
+        token: token,
       };
 
       const loggedIn = createUser(user);
@@ -176,21 +194,33 @@ export default class SignUp extends Component {
                 returnKeyType={"done"}
                 style={{ marginTop: -5 }}
                 placeholder="State License"
-                onChangeText={(value) => this.setState({ stateLicense: value })}
+                onChangeText={(value) => {
+                  this.onInputChange({
+                    field: "stateLicense",
+                    value,
+                    obj: "authInputs",
+                  });
+                }}
                 ref={(input) => {
                   this.dlTextInput = input;
                 }}
-                value={this.state.stateLicense}
+                value={this.state.authInputs.stateLicense}
               />
               <FormInput
                 mode="outlined"
                 returnKeyType={"done"}
                 placeholder="Branch"
-                onChangeText={(value) => this.setState({ branch: value })}
-                ref={(input) => {
-                  this.dlTextInput = input;
+                onChangeText={(value) => {
+                  this.onInputChange({
+                    field: "branch",
+                    value,
+                    obj: "authInputs",
+                  });
                 }}
-                value={this.state.branch}
+                // ref={(input) => {
+                //   this.dlTextInput = input;
+                // }}
+                // value={this.state.branch}
               />
               <TouchableOpacity
                 style={{
@@ -201,7 +231,7 @@ export default class SignUp extends Component {
               >
                 <View style={{ marginTop: 8 }}>
                   <Text style={{ fontSize: 16, fontFamily: "Poppins-Regular" }}>
-                     Department
+                    Department
                   </Text>
                 </View>
                 <View style={{ backgroundColor: "#F2F2F2", borderRadius: 20 }}>
@@ -270,6 +300,8 @@ export default class SignUp extends Component {
         confirmPassword: authInputs.confirmPassword.value,
         nationalID: authInputs.nationalID.value,
         stateLicense: authInputs.stateLicense.value,
+        branch:authInputs.branch.value,
+        department:this.state.department,
         responder: this.state.responder,
         token: this.state.token,
       };
@@ -277,7 +309,7 @@ export default class SignUp extends Component {
       const loggedIn = createUser(user);
 
       if (loggedIn) {
-        this.props.navigation.navigate("main");
+        this.props.navigation.navigate("signin");
       }
     };
     const { authInputs } = this.state;
@@ -588,6 +620,437 @@ export default class SignUp extends Component {
                       />
                       <Text
                         style={{
+                          fontWeight: "800",
+                          textAlign: "center",
+                          color: "#FFFFFF",
+                          fontFamily: "Poppins-Regular",
+                          fontSize: 18,
+                        }}
+                      >
+                        ALERT GHANA
+                      </Text>
+                    </View>
+                  </View>
+                  <View style={styles.footer}>
+                    <ScrollView showsVerticalScrollIndicator={false}>
+                      <Text style={styles.header}>Medical Information</Text>
+
+                      <View style={{ marginHorizontal: 2 }}>
+                        <View
+                          style={{
+                            flexDirection: "row",
+                            justifyContent: "space-between",
+                            marginTop: 6,
+                          }}
+                        >
+                          <TextInput
+                            textColor="#000"
+                            borderColor="#000"
+                            placeholder="Height(kg)"
+                            activeBorderColor="#000"
+                            returnKeyType={"next"}
+                            value={authInputs.height.value}
+                            style={{
+                              width: "45%",
+                              backgroundColor: "#F2F2F2",
+                              height: 45,
+                              borderRadius: 25,
+                              padding: 5,
+                            }}
+                            onChangeText={(value) => {
+                              this.onInputChange({
+                                field: "height",
+                                value,
+                                obj: "authInputs",
+                              });
+                            }}
+                          />
+                          <TextInput
+                            textColor="#000"
+                            borderColor="#000"
+                            placeholder="Weight(kg)"
+                            activeBorderColor="#000"
+                            returnKeyType={"next"}
+                            style={{
+                              width: "45%",
+                              backgroundColor: "#F2F2F2",
+                              height: 45,
+                              borderRadius: 25,
+                              padding: 5,
+                            }}
+                            value={authInputs.weight.value}
+                            onChangeText={(value) => {
+                              this.onInputChange({
+                                field: "weight",
+                                value,
+                                obj: "authInputs",
+                              });
+                            }}
+                          />
+                        </View>
+                        <View
+                          style={{
+                            backgroundColor: "#F0F8FF",
+                            borderRadius: 14,
+                            marginTop: 10,
+                          }}
+                        >
+                          <View style={{ marginHorizontal: 7, marginTop: 5 }}>
+                            <View
+                              style={{
+                                flexDirection: "row",
+                                alignItems: "center",
+                              }}
+                            >
+                              <Text style={styles.cardText}>STATUS</Text>
+                            </View>
+
+                            <View style={{ flexDirection: "row" }}>
+                              <View style={{ flexDirection: "row" }}>
+                                <RadioButton
+                                  value="GOOD"
+                                  color="#000000"
+                                  status={
+                                    this.state.status === "good"
+                                      ? "checked"
+                                      : "unchecked"
+                                  }
+                                  onPress={() =>
+                                    this.setState({ status: "good" })
+                                  }
+                                />
+                                <Text
+                                  style={{
+                                    fontSize: 18,
+                                    fontFamily: "Poppins-Regular",
+                                    marginTop: 5,
+                                  }}
+                                >
+                                  GOOD
+                                </Text>
+                              </View>
+                              <View style={{ flexDirection: "row" }}>
+                                <RadioButton
+                                  value="NORMAL"
+                                  color="#000000"
+                                  status={
+                                    this.state.status === "normal"
+                                      ? "checked"
+                                      : "unchecked"
+                                  }
+                                  onPress={() =>
+                                    this.setState({ status: "normal" })
+                                  }
+                                />
+                                <Text
+                                  style={{
+                                    fontSize: 18,
+                                    fontFamily: "Poppins-Regular",
+                                    textAlign: "center",
+                                    marginTop: 5,
+                                  }}
+                                >
+                                  NORMAL
+                                </Text>
+                              </View>
+                              <View style={{ flexDirection: "row" }}>
+                                <RadioButton
+                                  value="BAD"
+                                  color="#000000"
+                                  status={
+                                    this.state.status === "bad"
+                                      ? "checked"
+                                      : "unchecked"
+                                  }
+                                  onPress={() =>
+                                    this.setState({ status: "bad" })
+                                  }
+                                />
+                                <Text
+                                  style={{
+                                    fontSize: 18,
+                                    fontFamily: "Poppins-Regular",
+                                    textAlign: "center",
+                                    marginTop: 5,
+                                  }}
+                                >
+                                  BAD
+                                </Text>
+                              </View>
+                            </View>
+                          </View>
+
+                          <View style={{ marginHorizontal: 7 }}>
+                            <View
+                              style={{
+                                flexDirection: "row",
+                                alignItems: "center",
+                              }}
+                            >
+                              <Text style={styles.cardText}>
+                                CHRONIC DISEASE
+                              </Text>
+                            </View>
+
+                            <View style={{ flexDirection: "row" }}>
+                              <View style={{ flexDirection: "row" }}>
+                                <RadioButton
+                                  label="YES"
+                                  value="YES"
+                                  color="#000000"
+                                  status={
+                                    this.state.chronic === true
+                                      ? "checked"
+                                      : "unchecked"
+                                  }
+                                  onPress={() =>
+                                    this.setState({ chronic: true })
+                                  }
+                                />
+                                <Text
+                                  style={{
+                                    fontSize: 18,
+                                    fontFamily: "Poppins-Regular",
+                                    marginTop: 5,
+                                  }}
+                                >
+                                  YES
+                                </Text>
+                              </View>
+                              <View style={{ flexDirection: "row" }}>
+                                <RadioButton
+                                  value="NO"
+                                  color="#000000"
+                                  status={
+                                    this.state.chronic === false
+                                      ? "checked"
+                                      : "unchecked"
+                                  }
+                                  onPress={() =>
+                                    this.setState({ chronic: false })
+                                  }
+                                />
+                                <Text
+                                  style={{
+                                    fontSize: 18,
+                                    fontFamily: "Poppins-Regular",
+                                    textAlign: "center",
+                                    marginTop: 5,
+                                  }}
+                                >
+                                  NO
+                                </Text>
+                              </View>
+                            </View>
+                          </View>
+                          <View style={{ marginHorizontal: 7, marginTop: 5 }}>
+                            <View
+                              style={{
+                                flexDirection: "row",
+                                alignItems: "center",
+                              }}
+                            >
+                              <Text style={styles.cardText}>
+                                RESPIRATORY DISORDER
+                              </Text>
+                            </View>
+
+                            <View style={{ flexDirection: "row" }}>
+                              <View style={{ flexDirection: "row" }}>
+                                <RadioButton
+                                  value="GOOD"
+                                  color="#000000"
+                                  status={
+                                    this.state.respiratory === "good"
+                                      ? "checked"
+                                      : "unchecked"
+                                  }
+                                  onPress={() =>
+                                    this.setState({ respiratory: "good" })
+                                  }
+                                />
+                                <Text
+                                  style={{
+                                    fontSize: 18,
+                                    fontFamily: "Poppins-Regular",
+                                    marginTop: 5,
+                                  }}
+                                >
+                                  GOOD
+                                </Text>
+                              </View>
+                              <View style={{ flexDirection: "row" }}>
+                                <RadioButton
+                                  value="NORMAL"
+                                  color="#000000"
+                                  status={
+                                    this.state.respiratory === "normal"
+                                      ? "checked"
+                                      : "unchecked"
+                                  }
+                                  onPress={() =>
+                                    this.setState({ respiratory: "normal" })
+                                  }
+                                />
+                                <Text
+                                  style={{
+                                    fontSize: 18,
+                                    fontFamily: "Poppins-Regular",
+                                    textAlign: "center",
+                                    marginTop: 5,
+                                  }}
+                                >
+                                  NORMAL
+                                </Text>
+                              </View>
+                              <View style={{ flexDirection: "row" }}>
+                                <RadioButton
+                                  value="BAD"
+                                  color="#000000"
+                                  status={
+                                    this.state.respiratory === "bad"
+                                      ? "checked"
+                                      : "unchecked"
+                                  }
+                                  onPress={() =>
+                                    this.setState({ respiratory: "bad" })
+                                  }
+                                />
+                                <Text
+                                  style={{
+                                    fontSize: 18,
+                                    fontFamily: "Poppins-Regular",
+                                    textAlign: "center",
+                                    marginTop: 5,
+                                  }}
+                                >
+                                  BAD
+                                </Text>
+                              </View>
+                            </View>
+                          </View>
+
+                          <View style={{ marginHorizontal: 7, marginTop: 5 }}>
+                            <View
+                              style={{
+                                flexDirection: "row",
+                                alignItems: "center",
+                              }}
+                            >
+                              <Text style={styles.cardText}>ALLERGIES</Text>
+                            </View>
+
+                            <View style={{ flexDirection: "row" }}>
+                              <View style={{ flexDirection: "row" }}>
+                                <RadioButton
+                                  label="YES"
+                                  value="YES"
+                                  color="#000000"
+                                  status={
+                                    this.state.allergies === true
+                                      ? "checked"
+                                      : "unchecked"
+                                  }
+                                  onPress={() =>
+                                    this.setState({ allergies: true })
+                                  }
+                                />
+                                <Text
+                                  style={{
+                                    fontSize: 18,
+                                    fontFamily: "Poppins-Regular",
+                                    marginTop: 5,
+                                  }}
+                                >
+                                  YES
+                                </Text>
+                              </View>
+                              <View style={{ flexDirection: "row" }}>
+                                <RadioButton
+                                  value="NO"
+                                  color="#000000"
+                                  status={
+                                    this.state.allergies === false
+                                      ? "checked"
+                                      : "unchecked"
+                                  }
+                                  onPress={() =>
+                                    this.setState({ allergies: false })
+                                  }
+                                />
+                                <Text
+                                  style={{
+                                    fontSize: 18,
+                                    fontFamily: "Poppins-Regular",
+                                    textAlign: "center",
+                                    marginTop: 5,
+                                  }}
+                                >
+                                  NO
+                                </Text>
+                              </View>
+                            </View>
+                          </View>
+                        </View>
+
+                        <View
+                          style={{
+                            flexDirection: "row",
+                            marginTop: 10,
+                            justifyContent: "space-around",
+                          }}
+                        >
+                          <TouchableOpacity
+                            style={[
+                              styles.btn,
+                              { borderWidth: 1, borderColor: "#32527B" },
+                            ]}
+                            onPress={() => handlePress(2)}
+                          >
+                            <Text
+                              style={[styles.btnText, { color: "#32527B" }]}
+                            >
+                              Back
+                            </Text>
+                          </TouchableOpacity>
+                          <TouchableOpacity
+                            style={[styles.btn, { backgroundColor: "#32527B" }]}
+                            onPress={() => handlePress(3)}
+                          >
+                            <Text
+                              style={[styles.btnText, { color: "#FFFFFF" }]}
+                            >
+                              Proceed
+                            </Text>
+                          </TouchableOpacity>
+                        </View>
+                      </View>
+                    </ScrollView>
+                  </View>
+                </View>
+              </View>
+
+              <View key={4}>
+                <View style={styles.container}>
+                  <View style={styles.topSection}>
+                    <Image
+                      source={require("../../assets/images/bgShape.png")}
+                      style={{
+                        justifyContent: "flex-start",
+                        width: 210,
+                        height: 150,
+                      }}
+                    />
+                    <View style={{ marginTop: 40 }}>
+                      <Image
+                        source={require("../../assets/images/app_logo1.png")}
+                        style={{
+                          width: 150,
+                          height: 80,
+                        }}
+                      />
+                      <Text
+                        style={{
                           fontWeight: "500",
                           textAlign: "center",
                           color: "#FFFFFF",
@@ -652,9 +1115,12 @@ export default class SignUp extends Component {
                             <TouchableOpacity
                               style={[
                                 styles.btn,
-                                { borderWidth: 1, borderColor: "#32527B" },
+                                {
+                                  borderWidth: 1,
+                                  borderColor: "#32527B",
+                                },
                               ]}
-                              onPress={() => handlePress(1)}
+                              onPress={() => handlePress(3)}
                             >
                               <Text
                                 style={[styles.btnText, { color: "#32527B" }]}
@@ -737,6 +1203,10 @@ const styles = StyleSheet.create({
     textAlign: "center",
     fontWeight: "500",
     color: "#FFFFFF",
+    fontFamily: "Poppins-Regular",
+  },
+  cardText: {
+    fontSize: 18,
     fontFamily: "Poppins-Regular",
   },
 });

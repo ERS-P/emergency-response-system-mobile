@@ -9,8 +9,9 @@ import {
 } from "react-native";
 import CheckBox from "react-native-check-box";
 import Modal from "react-native-modal";
-import { submitEmergencyInfo } from "../../../api/auth";
+import { submitEmergencyInfo , getUser} from "../../../api/auth";
 import AsyncStorage from "@react-native-async-storage/async-storage";
+
 // import Geocoder from 'react-native-geocoding';
 // //---------------------------------------------------------------------------
 // Geocoder.init('AIzaSyDX-kRrpL4QR1x4L_NwpoV8HxK0ITx0wSQ'); // use a valid API key
@@ -50,7 +51,7 @@ export default class PostEmergencySubmit extends Component {
 
   onSubmit() {
    
-    var posterUserID = AsyncStorage.getItem("userID");
+    var posterUserID = getUser();
     if (this.state.checkedAgreement || this.state.checkedInformation) {
       submitEmergencyInfo(
         "Fire outbreak in legon hall",
@@ -59,7 +60,7 @@ export default class PostEmergencySubmit extends Component {
         this.state.damages,
         this.state.type,
         0,
-        posterUserID,
+        posterUserID.uid,
         this.state.pressCoordinates,
         false,
         this.state.town

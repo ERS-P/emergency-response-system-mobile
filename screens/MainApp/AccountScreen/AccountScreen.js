@@ -1,6 +1,6 @@
 import React, { Component } from "react";
 import { Alert } from "react-native";
-import { FontAwesome } from "@expo/vector-icons/";
+import { FontAwesome } from "@expo/vector-icons";
 import {
   Container,
   HeaderProfile,
@@ -15,15 +15,15 @@ import {
   Title,
   Icon,
 } from "./styles";
-import { logout , getProfile} from "../../../api/auth";
-// import AsyncStorage from "@react-native-async-storage/async-storage";
+import { logout, getProfile } from "../../../api/auth";
+
 
 export default class AccountScreen extends Component {
   constructor(props) {
     super(props);
-    this.state={
-      user:getProfile()
-    }
+    this.state = {
+      user: "",
+    };
     this.handleSignOut = this.handleSignOut.bind(this);
   }
 
@@ -35,6 +35,11 @@ export default class AccountScreen extends Component {
         onPress: () => logout(this),
       },
     ]);
+  }
+
+  componentWillMount() {
+    const userData = getProfile();
+    this.setState({ user: userData });
   }
 
   render() {
@@ -49,9 +54,9 @@ export default class AccountScreen extends Component {
           />
           <ProfileInfo>
             <Name>
-             Appau Samuel
+              {this.state.user.first_name} {this.state.user.last_name}
             </Name>
-            <Email>appausamuel90@gmail.com</Email>
+            <Email>{this.state.user.email}</Email>
           </ProfileInfo>
         </HeaderProfile>
 
@@ -74,16 +79,6 @@ export default class AccountScreen extends Component {
 
         <ProfileButton
           style={{ margin: 2 }}
-          onPress={() => this.props.navigation.navigate("")}
-        >
-          <Icon name="info" />
-          <Wrapper>
-            <Title>About App</Title>
-          </Wrapper>
-        </ProfileButton>
-
-        <ProfileButton
-          style={{ margin: 2 }}
           onPress={() => this.props.navigation.navigate("edit_profile")}
         >
           <Icon name="user" />
@@ -99,6 +94,16 @@ export default class AccountScreen extends Component {
           <Icon name="lock" />
           <Wrapper>
             <Title>Change Password</Title>
+          </Wrapper>
+        </ProfileButton>
+
+        <ProfileButton
+          style={{ margin: 2 }}
+          onPress={() => this.props.navigation.navigate("")}
+        >
+          <Icon name="info" />
+          <Wrapper>
+            <Title>About App</Title>
           </Wrapper>
         </ProfileButton>
 

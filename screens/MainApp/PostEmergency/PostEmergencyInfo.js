@@ -127,29 +127,6 @@ class PostEmergencyInfo extends Component {
                     NO
                   </Text>
                 </View>
-                {/* <Picker
-                  style={{
-                    width: 70,
-                    height: 40,
-                    padding: 2,
-                    backgroundColor: "#F2F2F2",
-                  }}
-                  onValueChange={(itemValue) => {
-                    this.setState({ damages: itemValue });
-                  }}
-                  selectedValue={this.state.damages}
-                >
-                  <Picker.Item value="" label="NONE" />
-                  {dataItems.map((item) => {
-                    return (
-                      <Picker.Item
-                        label={item.title}
-                        value={item.val}
-                        key={item.id}
-                      />
-                    );
-                  })}
-                </Picker> */}
               </View>
             </View>
             <TouchableOpacity style={styles.card} onPress={this._pickImage}>

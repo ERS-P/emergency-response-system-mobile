@@ -1,6 +1,5 @@
 import { Alert } from "react-native";
 import AsyncStorage from "@react-native-async-storage/async-storage";
-// import TokenService from "@around25/jwt-utils";
 import * as firebase from "firebase";
 
 const firebaseConfig = {
@@ -28,6 +27,7 @@ export function createUser({
   stateLicense,
   branch,
   department,
+  responder,
   token,
 }) {
   firebase
@@ -49,8 +49,9 @@ export function createUser({
           stateLicense: stateLicense,
           confirmPassword: confirmPassword,
           numPosts: 0,
-          branch:branch,
-          department:department,
+          branch: branch,
+          department: department,
+          responder: responder,
           token: token,
         });
       firebase
@@ -64,7 +65,6 @@ export function createUser({
             // An error happened.
           }
         );
-      AsyncStorage.setItem("userID", userID);
     })
     .catch(function (error) {
       // Handle Errors here.
@@ -75,7 +75,7 @@ export function createUser({
         return false;
       } else {
         alert("Error code:" + errorCode + "\n" + errorMessage);
-        console.log("Error code:" + errorCode + "\n" + errorMessage);
+
         return false;
       }
     });
@@ -263,8 +263,8 @@ export function getMyPosts(userId) {
 }
 
 export function changePassword(oldpassword, newpassword, confirmPassword) {
-  const userID=AsyncStorage.getItem("userID");
-  
+  const userID = AsyncStorage.getItem("userID");
+
   firebase
     .database()
     .ref("users/" + userID)
@@ -274,15 +274,30 @@ export function changePassword(oldpassword, newpassword, confirmPassword) {
     });
 }
 
-export function editProfile(){}
+export function editProfile() {}
 
 export function getProfile() {
-  firebase.auth().onAuthStateChanged(function (user) {
-    if (user) {
-      return user;
-    }
-    return false;
-  });
+  //   firebase.auth().onAuthStateChanged(function (user) {
+  //     if (user) {
+  //       firebase
+  //             .database()
+  //             .ref("users/" + user.uid)
+  //             .once("value")
+  //             .then(function (snapshot) {
+  //               var first_name = snapshot.val() && snapshot.val().firstname;
+  //               // var last_name = snapshot.val() && snapshot.val().lastname;
+  //               // var email = snapshot.val() && snapshot.val().email;
+
+  // +
+  //               // console.log(user.firstname);
+  //               // return first_name;
+  //             })
+  //             .catch((error) => {
+  //               console.log("");
+  //             });
+  // }
+  return false;
+  // });
 }
 
 export function removePosts(postId) {
@@ -291,3 +306,28 @@ export function removePosts(postId) {
     .ref("/posts/" + postId)
     .remove();
 }
+
+// export function getUser() {
+//   const user = firebase.auth().currentUser;
+
+//   if (user) {
+//     firebase
+//       .database()
+//       .ref("/users/" + user)
+//       .once("value")
+//       .then(function (snapshot) {
+//         // var first_name = snapshot.val() && snapshot.val().firstname;
+//         // var last_name = snapshot.val() && snapshot.val().lastname;
+//         // var email = snapshot.val() && snapshot.val().email;
+//         const items = {
+//           ...snapshot.val()
+//         }
+
+//         console.log(items);
+//          return items;
+//       })
+//       .catch((error) => {
+//         console.log("");
+//       });
+//   }
+// }

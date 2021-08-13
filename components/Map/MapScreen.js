@@ -1,13 +1,15 @@
 import React, { Component } from "react";
-import { StyleSheet, View, TouchableOpacity, Image } from "react-native";
+import { StyleSheet, View, TouchableOpacity, Image , Platform} from "react-native";
 import MapView from "react-native-maps";
 import Modal from "react-native-modal";
 import InfoModal from "./../Modal/InfoModal";
 import Permissions from "expo-permissions";
 import Location from "expo-location";
+import Constants from 'expo-constants'
 import LoadingScreen from "../LoadingScreen";
 import renderIf from "../renderIf";
 import { data } from "../../jsonData/index";
+import * as firebase from "firebase";
 
 const markerImages = {
   flood: require("../../assets/images/types/flood.png"),
@@ -95,7 +97,7 @@ export default class MapScreen extends Component {
     }
   };
 
-  UNSAFE_componentDidMount() {
+  componentDidMount() {
     this.setState(
       {
         markers: data,
@@ -104,17 +106,62 @@ export default class MapScreen extends Component {
     );
   }
 
-  UNSAFE_componentWillMount() {
-    this._getLocationAsync();
-    this.setState(
-      {
-        markers: data,
-      },
-      function () {}
-    );
+  // componentWillMount() {
+  //   this._getLocationAsync();
+  //   this.setState(
+  //     {
+  //       markers: data,
+  //     },
+  //     function () {}
+  //   );
 
+  //   setTimeout(
+  //     function () {
+  //       this.setState({ loaded: true });
+  //     }.bind(this),
+  //     2000
+  //   );
+  // }
+
+  componentWillMount() {
+    if (Platform.OS === "android" && !Constants.isDevice) {
+      this.setState({
+        errorMessage:
+          "Oops, this will not work on Sketch in an Android emulator. Try it on your device!",
+      });
+    } else {
+      this._getLocationAsync();
+    }
+
+    var that = this;
+    var dataObjectParent = [];
+    var postsRef = firebase.database().ref("/posts");
+    postsRef.on("value", function (snapshot) {
+      var val = snapshot.val();
+      var i = 0;
+      // snapshot.val() is the dictionary with all your keys/values from the '/store' path
+      for (var key in snapshot.val()) {
+        // var item = childSnapshot.val();
+        // item.key = childSnapshot.key;
+
+        var dataOb = snapshot.val()[key];
+        dataObjectParent.push(dataOb);
+        // console.log(JSON.stringify(dataOb));
+      }
+      // console.log(JSON.stringify(dataObjectParent));
+      that.setState(
+        {
+          markers: dataObjectParent,
+        },
+        function () {
+          // console.log(this.state.markers);
+          // this.addGeocoding(this.state.markers);
+        }
+      );
+    });
     setTimeout(
       function () {
+        //Start the timer
         this.setState({ loaded: true });
       }.bind(this),
       2000

@@ -172,22 +172,6 @@ export default class SignIn extends Component {
                         "password",
                         "password"
                       )}
-                      // rightIcon={
-                      //   <TouchableOpacity
-                      //     onPress={() =>
-                      //       this.setState({ isSecureEntry: !isSecureEntry })
-                      //     }
-                      //   >
-                      //     <MaterialCommunityIcons
-                      //       name={
-                      //         this.state.isSecureEntry
-                      //           ? "eye-outline"
-                      //           : "eye-off"
-                      //       }
-                      //       size={30}
-                      //     />
-                      //   </TouchableOpacity>
-                      // }
                       returnKeyType={"next"}
                       value={authInputs.password.value}
                       onChangeText={(value) => {

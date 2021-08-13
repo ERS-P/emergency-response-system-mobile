@@ -98,7 +98,7 @@ const validationDictionary = {
   },
   nationalID: {
     presence: { allowEmpty: true, message: "^is required" },
-    length: { is: 5, message: "^id no. must be 8 digits" },
+    length: { is: 5, message: "^id no. must be 10 digits" },
   },
 };
 

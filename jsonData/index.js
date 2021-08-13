@@ -331,53 +331,43 @@ export const CategoryData = [
 export const todayNotificationData = [
   {
     id: 1,
-    title: "Fire is uncontrallable but very dangerous",
-    timestamp: "15 minutes ago",
-    category: "Fire",
+    title: "Flood at your location",
+    timestamp: "1 minute ago",
+    category: "Flood",
   },
   {
     id: 2,
     title: "Fire is uncontrallable but very dangerous",
-    timestamp: "15 minutes ago",
-    category: "Flood",
+    timestamp: "5 minutes ago",
+    category: "Fire",
   },
   {
     id: 3,
-    title: "Fire is uncontrallable but very dangerous",
+    title: "Car Accident at Legon Main Road",
     timestamp: "15 minutes ago",
-    category: "Fire",
+    category: "Accident",
   },
-  {
-    id: 4,
-    title: "Fire is uncontrallable but very dangerous",
-    timestamp: "15 minutes ago",
-    category: "Fire",
-  },
+ 
 ];
 
 export const yesterdayNotificationData = [
   {
     id: 1,
     title: "Fire is uncontrallable but very dangerous",
-    timestamp: "15 minutes ago",
+    timestamp: "4 minutes ago",
     category: "Fire",
   },
   {
     id: 2,
-    title: "Fire is uncontrallable but very dangerous",
+    title: "Update your account to continue using the app",
     timestamp: "15 minutes ago",
-    category: "Flood",
+    category: "Aler",
   },
   {
     id: 3,
     title: "Fire is uncontrallable but very dangerous",
-    timestamp: "15 minutes ago",
+    timestamp: "2 minutes ago",
     category: "Fire",
   },
-  {
-    id: 4,
-    title: "Fire is uncontrallable but very dangerous",
-    timestamp: "15 minutes ago",
-    category: "Fire",
-  },
+
 ];
