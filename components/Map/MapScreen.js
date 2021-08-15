@@ -97,14 +97,14 @@ export default class MapScreen extends Component {
     }
   };
 
-  componentDidMount() {
-    this.setState(
-      {
-        markers: data,
-      },
-      function () {}
-    );
-  }
+  // componentDidMount() {
+  //   this.setState(
+  //     {
+  //       markers: data,
+  //     },
+  //     function () {}
+  //   );
+  // }
 
   // componentWillMount() {
   //   this._getLocationAsync();
@@ -164,7 +164,7 @@ export default class MapScreen extends Component {
         //Start the timer
         this.setState({ loaded: true });
       }.bind(this),
-      2000
+      5000
     );
   }
 
@@ -221,12 +221,12 @@ export default class MapScreen extends Component {
               {this.state.markers.map((marker) => (
                 <MapView.Marker
                   key={marker.key}
-                  coordinate={marker.coordinates}
+                  coordinate={marker.postRegion}
                   onPress={() => {
                     this._selectedInfo(marker);
                     this.setState({
                       selectedMarker: marker,
-                      region: marker.coordinates,
+                      region: marker.postRegion,
                     });
                     this._toggleModal();
                   }}

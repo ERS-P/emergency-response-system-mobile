@@ -32,8 +32,8 @@ export default class InfoModal extends Component {
       title: this.props.dataClick.title,
       description: this.props.dataClick.description,
       coordinates: {
-        latitude: this.props.dataClick.coordinates.latitude,
-        longitude: this.props.dataClick.coordinates.longitude,
+        latitude: this.props.dataClick.postRegion.latitude,
+        longitude: this.props.dataClick.postRegion.longitude,
       },
       town: this.props.dataClick.town,
       county: this.props.dataClick.county,

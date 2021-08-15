@@ -1,5 +1,12 @@
 import React, { Component } from "react";
-import { StyleSheet, View, Text, Image, TouchableOpacity } from "react-native";
+import {
+  StyleSheet,
+  View,
+  Text,
+  Image,
+  TouchableOpacity,
+  Keyboard,
+} from "react-native";
 import FormInput from "../../components/FormInput";
 import { validationService } from "../../util/validation";
 import { changePassword } from "../../api/auth";
@@ -14,7 +21,7 @@ export default class ChangePassword extends Component {
           value: "",
         },
         newpassword: {
-          type: "password",
+          type: "newPassword",
           value: "",
         },
         confirmpassword: {
@@ -24,8 +31,9 @@ export default class ChangePassword extends Component {
       },
       validForm: true,
       loading: false,
+      // token: this.props.route.params.token,
     };
-
+ 
     this.onInputChange = validationService.onInputChange.bind(this);
     this.getFormValidation = validationService.getFormValidation.bind(this);
     this.renderError = validationService.renderError.bind(this);
@@ -39,7 +47,7 @@ export default class ChangePassword extends Component {
           value: "",
         },
         newpassword: {
-          type: "password",
+          type: "newPassword",
           value: "",
         },
         confirmpassword: {
@@ -51,7 +59,19 @@ export default class ChangePassword extends Component {
   }
 
   render() {
-    const { authInputs } = this.state;
+    const { authInputs} = this.state;
+
+    const handleDone = () => {
+      this.getFormValidation({ obj: "authInputs" });
+      if (this.state.validForm) {
+        Keyboard.dismiss();
+        var oldPass = authInputs.oldpassword.value;
+        var newPass = authInputs.newpassword.value;
+        var confirmPass = authInputs.confirmpassword.value;
+        changePassword(oldPass, newPass, confirmPass);
+        this.resetUserInputs();
+      }
+    };
 
     return (
       <View style={styles.container}>
@@ -125,6 +145,7 @@ export default class ChangePassword extends Component {
             />
             <TouchableOpacity
               style={[styles.btn, { backgroundColor: "#32527B" }]}
+              onPress={()=>handleDone()}
             >
               <Text style={[styles.btnText, { color: "#FFFFFF" }]}>
                 Save Changes

@@ -67,9 +67,8 @@ export default class SignUp extends Component {
           value: "",
         },
         branch: { type: "genericRequired", value: "" },
-       
       },
-       department: "",
+      department: "",
       validForm: true,
 
       loading: false,
@@ -84,7 +83,7 @@ export default class SignUp extends Component {
     this.onInputChange = validationService.onInputChange.bind(this);
     this.getFormValidation = validationService.getFormValidation.bind(this);
     this.renderError = validationService.renderError.bind(this);
-    this.signup = this.signup.bind(this);
+    // this.signup = this.signup.bind(this);
     this.registerForPushNotificationsAsync = this.registerForPushNotificationsAsync.bind(
       this
     );
@@ -120,36 +119,55 @@ export default class SignUp extends Component {
     this.setState({ token: tokenVar });
   }
 
-  signup() {
-    this.getFormValidation({ obj: "authInputs" });
-    if (this.state.validForm) {
-      Keyboard.dismiss();
-      const { authInputs, branch, department, responder, token } = this.state;
+  // signup() {
+  //   this.getFormValidation({ obj: "authInputs" });
+  //   if (this.state.validForm) {
+  //     Keyboard.dismiss();
+  //     const {
+  //       authInputs,
+  //       department,
+  //       responder,
+  //       token,
+  //       status,
+  //       chronic,
+  //       allergies,
+  //       respiratory,
+  //     } = this.state;
 
-      const user = {
-        first_name: authInputs.first_name.value,
-        last_name: authInputs.last_name.value,
-        email: authInputs.email.value,
-        phone: authInputs.phone.value,
-        password: authInputs.password.value,
-        confirmPassword: authInputs.confirmPassword.value,
-        nationalID: authInputs.nationalID.value,
-        stateLicense: authInputs.stateLicense.value,
-        branch: authInputs.branch.value,
-        department: department,
-        responder: responder,
-        token: token,
-      };
+  //     const medInfo={
+  //       height:authInputs.height.value,
+  //       weight:authInputs.weight.value,
+  //       healthStatus:status,
+  //       chronicDisease:chronic,
+  //       allergies:allergies,
+  //       respiratory:respiratory
+  //     }
 
-      const loggedIn = createUser(user);
+  //     const user = {
+  //       first_name: authInputs.first_name.value,
+  //       last_name: authInputs.last_name.value,
+  //       email: authInputs.email.value,
+  //       phone: authInputs.phone.value,
+  //       password: authInputs.password.value,
+  //       confirmPassword: authInputs.confirmPassword.value,
+  //       nationalID: authInputs.nationalID.value,
+  //       stateLicense: authInputs.stateLicense.value,
+  //       branch: authInputs.branch.value,
+  //       department: department,
+  //       responder: responder,
+  //       token: token,
+  //       medicalInfo:medInfo
+  //     };
 
-      if (loggedIn) {
-        this.props.navigation.navigate("main");
-      }
+  //     const loggedIn = createUser(user);
 
-      this.resetUserInputs();
-    }
-  }
+  //     if (loggedIn) {
+  //       this.props.navigation.navigate("signin");
+  //     }
+
+  //     this.resetUserInputs();
+  //   }
+  // }
 
   resetUserInputs() {
     this.setState({
@@ -162,6 +180,8 @@ export default class SignUp extends Component {
         confirmPassword: { type: "confirm_password", value: "" },
         nationalID: { type: "genericRequired", value: "" },
         stateLicense: { type: "genericRequired", value: "" },
+        height: { type: "genericRequired", value: "" },
+        weight: { type: "genericRequired", value: "" },
       },
     });
   }
@@ -290,7 +310,26 @@ export default class SignUp extends Component {
       //   this.resetUserInputs();
       // }
       // this.props.navigation.navigate("main");
-      const { authInputs } = this.state;
+     
+      const {
+        authInputs,
+        department,
+        responder,
+        token,
+        status,
+        chronic,
+        allergies,
+        respiratory,
+      } = this.state;
+
+      const medInfo = {
+        height: authInputs.height.value,
+        weight: authInputs.weight.value,
+        healthStatus: status,
+        chronicDisease: chronic,
+        allergies: allergies,
+        respiratory: respiratory,
+      };
       const user = {
         first_name: authInputs.first_name.value,
         last_name: authInputs.last_name.value,
@@ -300,9 +339,10 @@ export default class SignUp extends Component {
         confirmPassword: authInputs.confirmPassword.value,
         nationalID: authInputs.nationalID.value,
         stateLicense: authInputs.stateLicense.value,
-        branch:authInputs.branch.value,
-        department:this.state.department,
+        branch: authInputs.branch.value,
+        department: this.state.department,
         responder: this.state.responder,
+        medicalInfo: medInfo,
         token: this.state.token,
       };
 
@@ -646,7 +686,7 @@ export default class SignUp extends Component {
                           <TextInput
                             textColor="#000"
                             borderColor="#000"
-                            placeholder="Height(kg)"
+                            placeholder="Height(cm)"
                             activeBorderColor="#000"
                             returnKeyType={"next"}
                             value={authInputs.height.value}

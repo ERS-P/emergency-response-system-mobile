@@ -1,17 +1,18 @@
 import { Alert } from "react-native";
 import AsyncStorage from "@react-native-async-storage/async-storage";
 import * as firebase from "firebase";
+import * as Facebook from "expo-facebook";
 
 const firebaseConfig = {
-  apiKey: "AIzaSyAKzxEU3WrctWL7atxggl8wgJrnDoA8btE",
-  authDomain: "emergency-response-sys-3fcca.firebaseapp.com",
-  projectId: "emergency-response-sys-3fcca",
-  storageBucket: "emergency-response-sys-3fcca.appspot.com",
+  apiKey: "AIzaSyAnviofAwpud7RI5hOzvJPyuzqzHJ8t19A",
+  authDomain: "emergency-response-system-2021.firebaseapp.com",
   databaseURL:
-    "https://emergency-response-sys-3fcca-default-rtdb.firebaseio.com/",
-  messagingSenderId: "333209295911",
-  appId: "1:333209295911:web:a61054a9f6fbce12748202",
-  measurementId: "G-5C9LMGXMZ9",
+    "https://emergency-response-system-2021-default-rtdb.firebaseio.com",
+  projectId: "emergency-response-system-2021",
+  storageBucket: "emergency-response-system-2021.appspot.com",
+  messagingSenderId: "414522555581",
+  appId: "1:414522555581:web:29f74477e715dc3edd0bd4",
+  measurementId: "G-TF1V1JZLPV",
 };
 
 firebase.initializeApp(firebaseConfig);
@@ -28,6 +29,7 @@ export function createUser({
   branch,
   department,
   responder,
+  medicalInfo,
   token,
 }) {
   firebase
@@ -52,7 +54,10 @@ export function createUser({
           branch: branch,
           department: department,
           responder: responder,
+          medicalInfo: medicalInfo,
           token: token,
+          emergency_contact_1: "",
+          emergency_contact_2: "",
         });
       firebase
         .auth()
@@ -87,23 +92,15 @@ export function signUserIn(providedEmail, providedPassword, that) {
   firebase
     .auth()
     .signInWithEmailAndPassword(providedEmail, providedPassword)
-    .then(function (response) {
-      var userId = firebase.auth().currentUser.uid;
+    .then((response) => {
+      var user = firebase.auth().currentUser;
+      var userId = user.uid;
+
       firebase
         .database()
         .ref("/users/" + userId)
         .once("value")
         .then(function (snapshot) {
-          var first_name = snapshot.val() && snapshot.val().firstname;
-          var last_name = snapshot.val() && snapshot.val().lastname;
-          var email = providedEmail;
-          var admin = snapshot.val() && snapshot.val().admin;
-
-          AsyncStorage.setItem("first_name", first_name);
-          AsyncStorage.setItem("last_name", last_name);
-          AsyncStorage.setItem("email", email);
-          AsyncStorage.setItem("userID", userId);
-          AsyncStorage.setItem("admin", "" + admin);
           that.setState({ loading: false });
           that.props.navigation.navigate("main");
         });
@@ -117,6 +114,56 @@ export function signUserIn(providedEmail, providedPassword, that) {
       console.log(error);
     });
   return;
+}
+
+export async function facebookSignIn(that) {
+  await Facebook.initializeAsync("318456936574489"); // enter your Facebook App Id
+  const { type, token } = await Facebook.logInWithReadPermissionsAsync({
+    permissions: ["public_profile", "email"],
+  });
+  if (type === "success") {
+    // SENDING THE TOKEN TO FIREBASE TO HANDLE AUTH
+    const credential = firebase.auth.FacebookAuthProvider.credential(token);
+    console.log(token);
+    firebase
+      .auth()
+      .signInWithCredential(credential)
+      .then(({ user }) => {
+        // All the details about user are in here returned from firebase
+        firebase
+          .database()
+          .ref("users")
+          .once("value")
+          .then((snapshot) => {
+            if (snapshot.child(`${user.uid}`).exists()) {
+              that.setState({ loading: false });
+              that.props.navigation.navigate("main", { token: token });
+            } else {
+              firebase
+                .database()
+                .ref("users/" + user.uid)
+                .set({
+                  userID: user.uid,
+                  email: user.email,
+                  firstname: user.displayName.split(" ")[0],
+                  lastname: user.displayName.split(" ")[1],
+                  phoneNumber: user.phoneNumber ? user.phoneNumber : "",
+                  numPosts: 0,
+                  token: that.state.token,
+                  emergency_contact_1: "",
+                  emergency_contact_2: "",
+                });
+              that.setState({ loading: false });
+              that.props.navigation.navigate("main", { token: token });
+            }
+          });
+      })
+      .catch((error) => {
+        that.setState({ loading: false });
+        Alert.alert(error.message);
+        console.log(error);
+      });
+  }
 }
 
 export function forgotPassword(email, that) {
@@ -138,13 +185,17 @@ export function forgotPassword(email, that) {
   return;
 }
 
-export const logout = async (that) => {
-  try {
-    await firebase.auth().signOut();
-    that.props.navigation.navigate("signin");
-  } catch (e) {
-    console.log(e);
-  }
+export const logout = (navigation) => {
+  firebase
+    .auth()
+    .signOut()
+    .then(() => {
+      navigation.navigate("signin");
+    })
+    .catch((eror) => {
+      console.log(e);
+      Alert.alert(error.code, error.message);
+    });
 };
 
 export function submitEmergencyInfo(
@@ -202,7 +253,7 @@ export function submitEmergencyInfo(
     .update({
       postId: postsRef.key,
     });
-  var length = 0;
+  var length;
   firebase
     .database()
     .ref("/posts/")
@@ -262,42 +313,90 @@ export function getMyPosts(userId) {
   return count;
 }
 
-export function changePassword(oldpassword, newpassword, confirmPassword) {
-  const userID = AsyncStorage.getItem("userID");
+export function changePassword(
+  oldpassword,
+  newpassword,
+  confirmPassword,
+  // token
+) {
+  const user = firebase.auth().currentUser;
+  const email = user.email;
+  const uid = user.uid;
 
-  firebase
-    .database()
-    .ref("users/" + userID)
-    .update({
-      password: newpassword,
-      confirmPassword: confirmPassword,
+  var provider = user.providerData[0].providerId;
+  console.log(provider);
+
+  var credential;
+  if (provider == "password")
+    credential = firebase.auth.EmailAuthProvider.credential(email, oldpassword);
+  else if (provider == "facebook.com") {
+    // credential = firebase.auth.FacebookAuthProvider.credential(token);
+  }
+
+  user
+    .reauthenticateWithCredential(credential)
+    .then(() => {
+      user
+        .updatePassword(newpassword)
+        .then(async () => {
+          await firebase
+            .database()
+            .ref("users/" + uid)
+            .update({
+              password: newpassword,
+              confirmPassword: confirmPassword,
+            });
+          Alert.alert("Password changed successfully!");
+        })
+        .catch((error) => {
+          Alert.alert(error.code, error.message);
+        });
+    })
+    .catch((error) => {
+      Alert.alert(error.code, error.message);
     });
 }
 
-export function editProfile() {}
+export function editProfile(userData) {
+  const user = firebase.auth().currentUser;
+  const userId = user.uid;
+  var provider = user.providerData[0].providerId;
+  console.log(provider);
 
-export function getProfile() {
-  //   firebase.auth().onAuthStateChanged(function (user) {
-  //     if (user) {
-  //       firebase
-  //             .database()
-  //             .ref("users/" + user.uid)
-  //             .once("value")
-  //             .then(function (snapshot) {
-  //               var first_name = snapshot.val() && snapshot.val().firstname;
-  //               // var last_name = snapshot.val() && snapshot.val().lastname;
-  //               // var email = snapshot.val() && snapshot.val().email;
-
-  // +
-  //               // console.log(user.firstname);
-  //               // return first_name;
-  //             })
-  //             .catch((error) => {
-  //               console.log("");
-  //             });
-  // }
-  return false;
-  // });
+  var credential;
+  if (provider == "password")
+    credential = firebase.auth.EmailAuthProvider.credential(email, oldpassword);
+  else if (provider == "facebook.com") {
+    credential = firebase.auth.FacebookAuthProvider.credential(userData.token);
+  }
+  user
+    .reauthenticateWithCredential(credential)
+    .then(() => {
+      firebase
+        .auth()
+        .currentUser.updateEmail(userData.email)
+        .then(() => {
+          firebase
+            .database()
+            .ref("users/" + userId)
+            .update({
+              firstname: userData.firstname,
+              lastname: userData.lastname,
+              email: userData.email,
+              phoneNumber: userData.phone,
+              emergency_contact_1: userData.emergencyContact1,
+              emergency_contact_2: userData.emergencyContact2,
+            });
+          Alert.alert("Profile details updated!");
+        })
+        .catch((error) => {
+          console.log(error);
+          Alert.alert("An error occurred!, Try again");
+        });
+    })
+    .catch((error) => {
+      Alert.alert(error.code, error.message);
+    });
 }
 
 export function removePosts(postId) {
@@ -307,27 +406,29 @@ export function removePosts(postId) {
     .remove();
 }
 
-// export function getUser() {
-//   const user = firebase.auth().currentUser;
+export const getUser = () => {
+  var items;
 
-//   if (user) {
-//     firebase
-//       .database()
-//       .ref("/users/" + user)
-//       .once("value")
-//       .then(function (snapshot) {
-//         // var first_name = snapshot.val() && snapshot.val().firstname;
-//         // var last_name = snapshot.val() && snapshot.val().lastname;
-//         // var email = snapshot.val() && snapshot.val().email;
-//         const items = {
-//           ...snapshot.val()
-//         }
+  firebase.auth().onAuthStateChanged((user) => {
+    if (user) {
+      firebase
+        .database()
+        .ref("users/" + user.uid)
+        .once("value")
+        .then(function (snapshot) {
+          // var first_name = snapshot.val() && snapshot.val().firstname;
+          // var last_name = snapshot.val() && snapshot.val().lastname;
+          // var email = snapshot.val() && snapshot.val().email;
+          const { userID, firstname, lastname, phoneNumber } = snapshot.val();
+          items = {
+            userID,
+            firstname,
+            lastname,
+            phoneNumber,
+          };
+        });
+    }
+  });
 
-//         console.log(items);
-//          return items;
-//       })
-//       .catch((error) => {
-//         console.log("");
-//       });
-//   }
-// }
+  return items;
+};

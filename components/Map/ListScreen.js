@@ -5,26 +5,32 @@ import Modal from "react-native-modal";
 import InfoModal from "./../Modal/InfoModal";
 import { data } from "../../jsonData/index";
 import { AntDesign } from "@expo/vector-icons";
+import firebase from "firebase";
 
 const markerImages = {
   flood: require("../../assets/images/types/flood.png"),
   fire: require("../../assets/images/main/fire.png"),
+  // first-aid:
+  // violence:,
+  // accident:,
   other: require("../../assets/images/main/alert.png"),
 };
 
+
+const list = [];
 export default class ListScreen extends Component {
   constructor(props) {
     super(props);
     this.ds = new ListView.DataSource({ rowHasChanged: (r1, r2) => r1 !== r2 });
 
     this.state = {
-      dataSource: this.ds.cloneWithRows(data),
+      dataSource: this.ds.cloneWithRows(list),
       isModalVisible: false,
       selectedMarker: {
         title: "",
         description: "",
         type: "fire",
-        coordinates: {
+        postRegion: {
           latitude: 0,
           longitude: 0,
         },
@@ -34,18 +40,37 @@ export default class ListScreen extends Component {
       userId: null,
     };
 
+    this.itemsRef = firebase.database().ref("/posts");
     this.renderItem = this.renderItem.bind(this);
     this.forceRefreshFunc = this.forceRefreshFunc.bind(this);
+  }
+
+  setItemsFromFirebase(itemsRef) {
+    itemsRef.on("value", (snapshot) => {
+      // get children as an array
+      var items = [];
+      for (var key in snapshot.val()) {
+        var dataOb = snapshot.val()[key];
+        if (typeof dataOb === "object") items.push(dataOb);
+      }
+
+      this.setState({
+        dataSource: this.ds.cloneWithRows(items),
+      });
+    });
   }
 
   forceRefreshFunc() {
     return;
   }
 
+  // componentDidMount() {
+  //   this.setState({
+  //     dataSource: this.ds.cloneWithRows(data),
+  //   });
+  // }
   componentDidMount() {
-    this.setState({
-      dataSource: this.ds.cloneWithRows(data),
-    });
+    this.setItemsFromFirebase(this.itemsRef);
   }
 
   capitalize(str) {
@@ -86,10 +111,10 @@ export default class ListScreen extends Component {
             </Text>
 
             <Text style={{ fontFamily: "Poppins-Regular" }}>
-              Lat: {item.coordinates.latitude}
+              Lat: {item.postRegion.latitude}
             </Text>
             <Text style={{ fontFamily: "Poppins-Regular" }}>
-              Long: {item.coordinates.longitude}
+              Long: {item.postRegion.longitude}
             </Text>
           </View>
           <View

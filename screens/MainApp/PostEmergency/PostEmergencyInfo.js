@@ -7,6 +7,9 @@ import {
   Image,
   TextInput,
   ScrollView,
+  KeyboardAvoidingView,
+  Keyboard,
+  TouchableWithoutFeedback,
 } from "react-native";
 import * as ImagePicker from "expo-image-picker";
 import PageHeader from "../../../components/PageHeader";
@@ -22,6 +25,7 @@ class PostEmergencyInfo extends Component {
       damages: true,
       description: "",
       type: this.props.route.params.type,
+      title: "",
     };
   }
   _pickImage = async () => {
@@ -32,7 +36,7 @@ class PostEmergencyInfo extends Component {
     const permissionResult = await ImagePicker.requestCameraPermissionsAsync();
 
     if (permissionResult.granted === false) {
-      alert("You've refused to allow this appp to access your camera!");
+      alert("You've refused to allow this app to access your camera!");
       return;
     }
 
@@ -73,7 +77,7 @@ class PostEmergencyInfo extends Component {
     return (
       <View style={styles.container}>
         <PageHeader pageTitle={"Description"} />
-        <ScrollView showsVerticalScrollIndicator={true}>
+        <ScrollView showsVerticalScrollIndicator={false}>
           <View style={{ marginHorizontal: 7 }}>
             <View style={styles.card}>
               <View style={{ flexDirection: "row", alignItems: "center" }}>
@@ -156,21 +160,49 @@ class PostEmergencyInfo extends Component {
                 </View>
               )}
             </View>
-            <View style={{ marginHorizontal: 2 }}>
-              <Text style={{ fontFamily: "Poppins-Regular", fontSize: 18 }}>
-                Add a description to the emergency
-              </Text>
-              <TextInput
-                multiline={true}
-                backgroundColor={"#FFFFFF"}
-                style={{ height: 100 }}
-                onChangeText={(text) =>
-                  this.setState({
-                    description: text,
-                  })
-                }
-              />
-            </View>
+            <ScrollView showsVerticalScrollIndicator={false}>
+              <View style={{ marginHorizontal: 2 }}>
+                <Text style={{ fontFamily: "Poppins-Regular", fontSize: 18 }}>
+                  Emergency Title
+                </Text>
+                <TextInput
+                  backgroundColor={"#FFFFFF"}
+                  style={{ height: 45 }}
+                  onChangeText={(text) =>
+                    this.setState({
+                      title: text,
+                    })
+                  }
+                />
+              </View>
+              <View style={{ marginHorizontal: 2 }}>
+                <KeyboardAvoidingView style={{ flex: 0 }} behavior="padding">
+                  <TouchableWithoutFeedback
+                    style={{ flex: 1 }}
+                    onPress={() => Keyboard.dismiss()}
+                  >
+                    <>
+                      <Text
+                        style={{ fontFamily: "Poppins-Regular", fontSize: 18 }}
+                      >
+                        Add a description to the emergency
+                      </Text>
+                      <TextInput
+                        multiline={true}
+                        numberOfLines={4}
+                        backgroundColor={"#FFFFFF"}
+                        // style={{ height: 100 }}
+                        onChangeText={(text) =>
+                          this.setState({
+                            description: text,
+                          })
+                        }
+                      />
+                    </>
+                  </TouchableWithoutFeedback>
+                </KeyboardAvoidingView>
+              </View>
+            </ScrollView>
 
             <View
               style={{
@@ -189,6 +221,7 @@ class PostEmergencyInfo extends Component {
                 onPress={() =>
                   this.props.navigation.navigate("map", {
                     type: this.state.type,
+                    title: this.state.title,
                     damages: this.state.damages,
                     description: this.state.description,
                     media: this.state.LocalImage,
@@ -226,11 +259,11 @@ const styles = StyleSheet.create({
     shadowColor: "#000",
     shadowOffset: {
       width: 0,
-      height: 1,
+      height: 0.8,
     },
-    shadowOpacity: 0.2,
+    shadowOpacity: 0.25,
     shadowRadius: 1.41,
-    elevation: 2,
+    elevation: 1,
   },
   cardText: {
     fontSize: 15,
