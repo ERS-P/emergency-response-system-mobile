@@ -88,7 +88,7 @@ export default class PostEmergencySubmit extends Component {
         this.state.town
       );
       this.setState({ modalVisible: true });
-      this.props.navigation.navigate("post");
+      // this.props.navigation.navigate("post");
     } else {
       alert(
         "You did not accept our posting agrrement. You cannot continue if you don't accept."
@@ -284,6 +284,15 @@ export default class PostEmergencySubmit extends Component {
             <Text style={{ fontSize: 20, textAlign: "center" }}>
               Your emergency has been submitted successfully
             </Text>
+            <TouchableOpacity
+              style={[
+                styles.button,
+                { borderWidth: 1, borderColor: "#32527B" },
+              ]}
+              onPress={() => this.props.navigation.navigate("post")}
+            >
+              <Text style={[styles.btnText, { color: "#000000" }]}>DONE</Text>
+            </TouchableOpacity>
           </View>
         </Modal>
       </ScrollView>

@@ -49,31 +49,7 @@ class PostEmergencyInfo extends Component {
     }
   };
 
-  // _pickImage = async () => {
-  //   this.setState({
-  //     mode: false,
-  //   });
-
-  //   let result = await ImagePicker.launchImageLibraryAsync({
-  //     mediaTypes: ImagePicker.MediaTypeOptions.All,
-  //     allowsEditing: true,
-  //     aspect: [4, 3],
-  //     quality: 1,
-  //   });
-
-  //   if (!result.cancelled) {
-  //     this.setState({
-  //       LocalImage: result.uri,
-  //     });
-  //   }
-  // };
-
   render() {
-    // const dataItems = [
-    //   { id: 1, title: "YES", val: true },
-    //   { id: 2, title: "NO", val: false },
-    // ];
-
     return (
       <View style={styles.container}>
         <PageHeader pageTitle={"Description"} />
@@ -191,7 +167,6 @@ class PostEmergencyInfo extends Component {
                         multiline={true}
                         numberOfLines={4}
                         backgroundColor={"#FFFFFF"}
-                        // style={{ height: 100 }}
                         onChangeText={(text) =>
                           this.setState({
                             description: text,

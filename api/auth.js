@@ -198,6 +198,20 @@ export const logout = (navigation) => {
     });
 };
 
+
+export const uploadImage = async (uri, emergencyId) => {
+  const response = await fetch(uri);
+  const blob = await response.blob();
+
+  var ref = firebase
+    .storage()
+    .ref()
+    .child("images/" + emergencyId);
+  return ref.put(blob);
+};
+
+// const sourceAsString = this.state.media.toString();
+// const fileName = sourceAsString.split("/").pop();
 export function submitEmergencyInfo(
   postTitle,
   postDescription,
@@ -244,8 +258,12 @@ export function submitEmergencyInfo(
   var ref = firebase.app().database().ref();
 
   var postsRef = ref.child("posts");
+  
   // Create a new ref and log it’s push key
   var postsRef = postsRef.push(data);
+
+  uploadImage(postImage, postsRef.key);
+  
   console.log("post key", postsRef.key);
   firebase
     .database()
