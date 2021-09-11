@@ -1,5 +1,4 @@
 import { Alert } from "react-native";
-import AsyncStorage from "@react-native-async-storage/async-storage";
 import * as firebase from "firebase";
 import * as Facebook from "expo-facebook";
 
@@ -17,21 +16,24 @@ const firebaseConfig = {
 
 firebase.initializeApp(firebaseConfig);
 
-export function createUser({
-  first_name,
-  last_name,
-  email,
-  phone,
-  password,
-  confirmPassword,
-  nationalID,
-  stateLicense,
-  branch,
-  department,
-  responder,
-  medicalInfo,
-  token,
-}) {
+export function createUser(
+  {
+    first_name,
+    last_name,
+    email,
+    phone,
+    password,
+    confirmPassword,
+    nationalID,
+    stateLicense,
+    branch,
+    department,
+    responder,
+    medicalInfo,
+    token,
+  },
+  that
+) {
   firebase
     .auth()
     .createUserWithEmailAndPassword(email, password)
@@ -63,26 +65,23 @@ export function createUser({
         .auth()
         .currentUser.sendEmailVerification()
         .then(
-          function () {
-            // Email sent.
-          },
+          function () {},
           function (error) {
-            // An error happened.
+            Alert.alert(error);
           }
         );
+    })
+    .then(function () {
+      that.setState({ loading: false });
+      // that.props.navigation.navigate("signin",{token:token});
+      that.props.navigation.navigate("signin")
     })
     .catch(function (error) {
       // Handle Errors here.
       var errorCode = error.code;
       var errorMessage = error.message;
-      if (errorCode === "auth/wrong-password") {
-        alert("Wrong password.");
-        return false;
-      } else {
-        alert("Error code:" + errorCode + "\n" + errorMessage);
 
-        return false;
-      }
+      alert("Error code:" + errorCode + "\n" + errorMessage);
     });
   return true;
 }
@@ -198,7 +197,6 @@ export const logout = (navigation) => {
     });
 };
 
-
 export const uploadImage = async (uri, emergencyId) => {
   const response = await fetch(uri);
   const blob = await response.blob();
@@ -210,8 +208,6 @@ export const uploadImage = async (uri, emergencyId) => {
   return ref.put(blob);
 };
 
-// const sourceAsString = this.state.media.toString();
-// const fileName = sourceAsString.split("/").pop();
 export function submitEmergencyInfo(
   postTitle,
   postDescription,
@@ -258,12 +254,12 @@ export function submitEmergencyInfo(
   var ref = firebase.app().database().ref();
 
   var postsRef = ref.child("posts");
-  
+
   // Create a new ref and log it’s push key
   var postsRef = postsRef.push(data);
 
   uploadImage(postImage, postsRef.key);
-  
+
   console.log("post key", postsRef.key);
   firebase
     .database()
@@ -286,6 +282,18 @@ export function submitEmergencyInfo(
 export function getEmergencyData() {
   var items = [];
   var postsRef = firebase.database().ref("/posts");
+  postsRef.on("value", function (snapshot) {
+    for (var key in snapshot.val()) {
+      var dataOb = snapshot.val()[key];
+      if (typeof dataOb === "object") items.push(dataOb);
+    }
+  });
+  return items;
+}
+
+export function getTipsData() {
+  var items = [];
+  var postsRef = firebase.database().ref("/tips");
   postsRef.on("value", function (snapshot) {
     for (var key in snapshot.val()) {
       var dataOb = snapshot.val()[key];
@@ -334,7 +342,7 @@ export function getMyPosts(userId) {
 export function changePassword(
   oldpassword,
   newpassword,
-  confirmPassword,
+  confirmPassword
   // token
 ) {
   const user = firebase.auth().currentUser;
@@ -450,3 +458,20 @@ export const getUser = () => {
 
   return items;
 };
+
+export function getUserData() {
+  const items = [];
+  const userRef = firebase.database().ref("/users");
+  userRef.on("value", function (snapshot) {
+    for (var key in snapshot.val()) {
+      var dataOb = snapshot.val()[key];
+      if (typeof dataOb === "object") items.push(dataOb);
+    }
+  });
+
+  const responders = items.filter(function (data) {
+    return data.responder === true;
+  });
+
+  return responders;
+}

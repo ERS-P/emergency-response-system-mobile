@@ -1,13 +1,13 @@
 import React, { Component } from "react";
-import { View, StyleSheet } from "react-native";
+import { View, StyleSheet, Text, Image, TouchableOpacity } from "react-native";
 import TopBarNav from "top-bar-nav";
+import Modal from "react-native-modal";
 import { Ionicons } from "@expo/vector-icons";
 import { data } from "../../jsonData/index";
 import MapScreen from "../../components/Map/MapScreen";
 import ListScreen from "../../components/Map/ListScreen";
 import LoadingScreen from "../../components/LoadingScreen";
-// import { getEmergencyData } from "../../api/auth";
-
+import firebase from "firebase";
 
 const ROUTES = {
   MapScreen,
@@ -37,6 +37,7 @@ export default class HomeScreen extends Component {
     super(props);
     this.state = {
       markers: null,
+      isResponder: null,
       isModalVisible: false,
       region: defaultRegion,
       selectedMarker: {
@@ -54,37 +55,87 @@ export default class HomeScreen extends Component {
   }
 
   componentDidMount() {
-    // this.setState({ markers: getEmergencyData() }); 
+    firebase.auth().onAuthStateChanged((user) => {
+      const userId = user.uid;
+      if (user) {
+        firebase
+          .database()
+          .ref("users/" + userId)
+          .once("value")
+          .then((snapshot) => {
+            const { responder } = snapshot.val();
+            this.setState({ isResponder: responder });
+          });
+      }
+    });
     this.setState({ markers: data });
   }
 
   render() {
     if (this.state.markers != null) {
-      return (
-        <View style={{ flex: 1 }}>
-          <TopBarNav
-            routeStack={ROUTESTACK}
-            renderScene={(route, i) => {
-              let Component = ROUTES[route.title];
-
-              return (
-                <Component
-                  defaultRegion={this.state.region}
-                  data={this.state.markers}
-                  index={i}
+      if (this.state.isResponder === false) {
+        return (
+          <>
+            <View style={{ flex: 1 }}>
+              <View
+                style={{
+                  justifyContent: "center",
+                  alignSelf: "center",
+                  flex: 1,
+                }}
+              >
+                <Image
+                  source={require("../../assets/images/restriction.png")}
+                  style={{ width: 200, height: 200, marginLeft: 20 }}
                 />
-              );
-            }}
-            headerStyle={[styles.headerStyle, { paddingTop: 30 }]}
-            labelStyle={styles.labelStyle}
-            underlineStyle={styles.underlineStyle}
-            imageStyle={styles.imageStyle}
-            sidePadding={40}
-            inactiveOpacity={1}
-            fadeLabels={true}
-          />
-        </View>
-      );
+                <View
+                  style={{
+                    alignSelf: "center",
+                    marginTop: 16,
+                    flexDirection: "row",
+                  }}
+                >
+                  <Text
+                    style={{
+                      fontSize: 14,
+                      fontWeight: "200",
+                      fontFamily: "Poppins-Regular",
+                    }}
+                  >
+                    Only responders can access this screen.
+                  </Text>
+                </View>
+              </View>
+            </View>
+          </>
+        );
+      } else {
+        return (
+          <View style={{ flex: 1 }}>
+            <TopBarNav
+              routeStack={ROUTESTACK}
+              renderScene={(route, i) => {
+                let Component = ROUTES[route.title];
+
+                return (
+                  <Component
+                    defaultRegion={this.state.region}
+                    data={this.state.markers}
+                    index={i}
+                  />
+                );
+              }}
+              headerStyle={[styles.headerStyle, { paddingTop: 30 }]}
+              labelStyle={styles.labelStyle}
+              underlineStyle={styles.underlineStyle}
+              imageStyle={styles.imageStyle}
+              sidePadding={40}
+              inactiveOpacity={1}
+              fadeLabels={true}
+            />
+          </View>
+        );
+      }
     } else {
       return <LoadingScreen />;
     }

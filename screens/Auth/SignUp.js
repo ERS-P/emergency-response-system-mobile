@@ -9,12 +9,11 @@ import {
   TouchableWithoutFeedback,
   KeyboardAvoidingView,
   ScrollView,
-  Picker,
   TextInput,
 } from "react-native";
+import { Item, Picker, Textarea, Form } from "native-base";
 import PagerView from "react-native-pager-view";
 import FormInput from "../../components/FormInput";
-import { RadioButton } from "react-native-paper";
 import { validationService } from "../../util/validation";
 import CheckBox from "react-native-check-box";
 import { createUser } from "../../api/auth";
@@ -70,20 +69,19 @@ export default class SignUp extends Component {
       },
       department: "",
       validForm: true,
-
       loading: false,
       status: "",
-      chronic: false,
-      allergies: false,
-      respiratory: "",
+      chronic: "",
       responder: false,
+      healthDesc: "",
+      respiratory: "",
+      allergies: "",
       token: "",
     };
     this.pagerRef = React.createRef();
     this.onInputChange = validationService.onInputChange.bind(this);
     this.getFormValidation = validationService.getFormValidation.bind(this);
     this.renderError = validationService.renderError.bind(this);
-    // this.signup = this.signup.bind(this);
     this.registerForPushNotificationsAsync = this.registerForPushNotificationsAsync.bind(
       this
     );
@@ -119,80 +117,7 @@ export default class SignUp extends Component {
     this.setState({ token: tokenVar });
   }
 
-  // signup() {
-  //   this.getFormValidation({ obj: "authInputs" });
-  //   if (this.state.validForm) {
-  //     Keyboard.dismiss();
-  //     const {
-  //       authInputs,
-  //       department,
-  //       responder,
-  //       token,
-  //       status,
-  //       chronic,
-  //       allergies,
-  //       respiratory,
-  //     } = this.state;
-
-  //     const medInfo={
-  //       height:authInputs.height.value,
-  //       weight:authInputs.weight.value,
-  //       healthStatus:status,
-  //       chronicDisease:chronic,
-  //       allergies:allergies,
-  //       respiratory:respiratory
-  //     }
-
-  //     const user = {
-  //       first_name: authInputs.first_name.value,
-  //       last_name: authInputs.last_name.value,
-  //       email: authInputs.email.value,
-  //       phone: authInputs.phone.value,
-  //       password: authInputs.password.value,
-  //       confirmPassword: authInputs.confirmPassword.value,
-  //       nationalID: authInputs.nationalID.value,
-  //       stateLicense: authInputs.stateLicense.value,
-  //       branch: authInputs.branch.value,
-  //       department: department,
-  //       responder: responder,
-  //       token: token,
-  //       medicalInfo:medInfo
-  //     };
-
-  //     const loggedIn = createUser(user);
-
-  //     if (loggedIn) {
-  //       this.props.navigation.navigate("signin");
-  //     }
-
-  //     this.resetUserInputs();
-  //   }
-  // }
-
-  resetUserInputs() {
-    this.setState({
-      authInputs: {
-        first_name: { type: "name", value: "" },
-        last_name: { type: "name", value: "" },
-        phone: { type: "phone", value: "" },
-        email: { type: "email", value: "" },
-        password: { type: "password", value: "" },
-        confirmPassword: { type: "confirm_password", value: "" },
-        nationalID: { type: "genericRequired", value: "" },
-        stateLicense: { type: "genericRequired", value: "" },
-        height: { type: "genericRequired", value: "" },
-        weight: { type: "genericRequired", value: "" },
-      },
-    });
-  }
-
   renderresponderSection() {
-    const dataItems = [
-      { id: 1, title: "Fire Service", val: "fire" },
-      { id: 2, title: "Police Service", val: "police" },
-      { id: 2, title: "Ambulance Service", val: "ambulance" },
-    ];
-
     if (this.state.responder) {
       return (
         <KeyboardAvoidingView style={{ flex: 0 }} behavior="padding">
@@ -237,12 +162,8 @@ export default class SignUp extends Component {
                     obj: "authInputs",
                   });
                 }}
-                // ref={(input) => {
-                //   this.dlTextInput = input;
-                // }}
-                // value={this.state.branch}
               />
-              <TouchableOpacity
+              <View
                 style={{
                   flexDirection: "row",
                   marginHorizontal: 10,
@@ -254,35 +175,25 @@ export default class SignUp extends Component {
                     Department
                   </Text>
                 </View>
-                <View style={{ backgroundColor: "#F2F2F2", borderRadius: 20 }}>
-                  <Picker
-                    style={{
-                      width: 170,
-                      height: 39,
-                      paddingVertical: 15,
-                      borderRadius: 10,
-                      marginLeft: 30,
 
-                      backgroundColor: "#F2F2F2",
-                    }}
+                <Item picker>
+                  <Picker
+                    mode="dropdown"
+                    style={{ width: 250, fontWeight: "bold" }}
+                    placeholderStyle={{ color: "#bfc6ea" }}
+                    placeholderIconColor="#007aff"
                     onValueChange={(itemValue) => {
                       this.setState({ department: itemValue });
                     }}
                     selectedValue={this.state.department}
                   >
-                    <Picker.Item value="" label="Select your department" />
-                    {dataItems.map((item) => {
-                      return (
-                        <Picker.Item
-                          label={item.title}
-                          value={item.val}
-                          key={item.id}
-                        />
-                      );
-                    })}
+                    <Picker.Item label="Select an option" />
+                    <Picker.Item label="Fire service" value="Fire" />
+                    <Picker.Item label="Ambulance service" value="Ambulance" />
+                    <Picker.Item label="Police service" value="Police" />
                   </Picker>
-                </View>
-              </TouchableOpacity>
+                </Item>
+              </View>
             </View>
           </ScrollView>
         </KeyboardAvoidingView>
@@ -293,33 +204,59 @@ export default class SignUp extends Component {
   }
   render() {
     const handlePress = (pageNumber) => {
-      // this.getFormValidation({ obj: "authInputs" });
-      // if (this.state.validForm) {
-      //   Keyboard.dismiss();
-      //   this.pagerRef.current.setPage(pageNumber);
-      //   this.resetUserInputs();
-      // }
-      this.pagerRef.current.setPage(pageNumber);
+      if (pageNumber === 1) {
+        this.getFormValidation({ obj: "authInputs" });
+        if (
+          this.state.validForm === true &&
+          authInputs.first_name.value != "" &&
+          authInputs.last_name.value != "" &&
+          authInputs.email.value != "" &&
+          authInputs.phone.value != ""
+        ) {
+          Keyboard.dismiss();
+          this.pagerRef.current.setPage(1);
+          // this.resetUserInputs1();
+        } else {
+          this.pagerRef.current.setPage(0);
+        }
+      } else if (pageNumber === 2) {
+        this.getFormValidation({ obj: "authInputs" });
+        if (
+          this.state.validForm === true ||
+          authInputs.password.value != ""
+          // authInputs.confirmPassword.value != ""
+        ) {
+          Keyboard.dismiss();
+          this.pagerRef.current.setPage(2);
+          // this.resetUserInputs2();
+        } else {
+          this.pagerRef.current.setPage(1);
+        }
+      } else if (pageNumber === 3) {
+        // if (this.state.validForm) {
+        Keyboard.dismiss();
+        this.pagerRef.current.setPage(3);
+        // }
+        // this.resetUserInputs3();
+        // } else {
+        //   if (this.state.validForm) {
+        //     Keyboard.dismiss();
+        //     this.pagerRef.current.setPage(2);
+        //     // this.resetUserInputs4();
+        //   }
+        // }
+      }
     };
 
     const handleDone = () => {
-      // this.getFormValidation({ obj: "authInputs" });
-      // if (this.state.validForm) {
-      //   Keyboard.dismiss();
-      //   this.props.navigation.navigate("main");
-      //   this.resetUserInputs();
-      // }
-      // this.props.navigation.navigate("main");
-     
+      this.setState({ loading: true });
       const {
         authInputs,
-        department,
-        responder,
-        token,
         status,
         chronic,
-        allergies,
+        healthDesc,
         respiratory,
+        allergies,
       } = this.state;
 
       const medInfo = {
@@ -327,8 +264,9 @@ export default class SignUp extends Component {
         weight: authInputs.weight.value,
         healthStatus: status,
         chronicDisease: chronic,
-        allergies: allergies,
+        healthDesc: healthDesc,
         respiratory: respiratory,
+        allergies: allergies,
       };
       const user = {
         first_name: authInputs.first_name.value,
@@ -345,12 +283,17 @@ export default class SignUp extends Component {
         medicalInfo: medInfo,
         token: this.state.token,
       };
+      Keyboard.dismiss();
 
-      const loggedIn = createUser(user);
+      createUser(user, this);
 
-      if (loggedIn) {
-        this.props.navigation.navigate("signin");
-      }
+      // this.getFormValidation({ obj: "authInputs" });
+      // if (this.state.validForm && authInputs.nationalID.value != "") {
+      //   Keyboard.dismiss();
+
+      //   createUser(user, this);
+      //   // this.resetUserInputs();
+      // }
     };
     const { authInputs } = this.state;
 
@@ -373,8 +316,8 @@ export default class SignUp extends Component {
                       source={require("../../assets/images/bgShape.png")}
                       style={{
                         justifyContent: "flex-start",
-                        width: 210,
-                        height: 150,
+                        width: 120,
+                        height: 90,
                       }}
                     />
                     <View style={{ marginTop: 40 }}>
@@ -503,7 +446,7 @@ export default class SignUp extends Component {
                               { borderWidth: 1, borderColor: "#32527B" },
                             ]}
                             onPress={() =>
-                              this.props.navigation.navigate("welcome")
+                              this.props.navigation.navigate("authmain")
                             }
                           >
                             <Text
@@ -536,8 +479,8 @@ export default class SignUp extends Component {
                       source={require("../../assets/images/bgShape.png")}
                       style={{
                         justifyContent: "flex-start",
-                        width: 210,
-                        height: 150,
+                        width: 150,
+                        height: 90,
                       }}
                     />
                     <View style={{ marginTop: 40 }}>
@@ -646,15 +589,15 @@ export default class SignUp extends Component {
                       source={require("../../assets/images/bgShape.png")}
                       style={{
                         justifyContent: "flex-start",
-                        width: 210,
-                        height: 150,
+                        width: 150,
+                        height: 80,
                       }}
                     />
                     <View style={{ marginTop: 40 }}>
                       <Image
                         source={require("../../assets/images/app_logo1.png")}
                         style={{
-                          width: 150,
+                          width: 120,
                           height: 80,
                         }}
                       />
@@ -680,357 +623,173 @@ export default class SignUp extends Component {
                           style={{
                             flexDirection: "row",
                             justifyContent: "space-between",
-                            marginTop: 6,
+                            marginTop: 4,
                           }}
                         >
-                          <TextInput
-                            textColor="#000"
-                            borderColor="#000"
-                            placeholder="Height(cm)"
-                            activeBorderColor="#000"
-                            returnKeyType={"next"}
-                            value={authInputs.height.value}
-                            style={{
-                              width: "45%",
-                              backgroundColor: "#F2F2F2",
-                              height: 45,
-                              borderRadius: 25,
-                              padding: 5,
-                            }}
-                            onChangeText={(value) => {
-                              this.onInputChange({
-                                field: "height",
-                                value,
-                                obj: "authInputs",
-                              });
-                            }}
-                          />
-                          <TextInput
-                            textColor="#000"
-                            borderColor="#000"
-                            placeholder="Weight(kg)"
-                            activeBorderColor="#000"
-                            returnKeyType={"next"}
-                            style={{
-                              width: "45%",
-                              backgroundColor: "#F2F2F2",
-                              height: 45,
-                              borderRadius: 25,
-                              padding: 5,
-                            }}
-                            value={authInputs.weight.value}
-                            onChangeText={(value) => {
-                              this.onInputChange({
-                                field: "weight",
-                                value,
-                                obj: "authInputs",
-                              });
-                            }}
-                          />
+                          <View style={{ flexDirection: "row" }}>
+                            <TextInput
+                              textColor="#000"
+                              borderColor="#000"
+                              placeholder="Height"
+                              activeBorderColor="#000"
+                              returnKeyType={"next"}
+                              value={authInputs.height.value}
+                              style={{
+                                width: "47%",
+                                backgroundColor: "#F2F2F2",
+                                height: 39,
+                                borderRadius: 20,
+                                padding: 8,
+                              }}
+                              onChangeText={(value) => {
+                                this.onInputChange({
+                                  field: "height",
+                                  value,
+                                  obj: "authInputs",
+                                });
+                              }}
+                            />
+                            <Text
+                              style={{
+                                textAlign: "center",
+                                alignSelf: "center",
+                              }}
+                            >
+                              cm
+                            </Text>
+                          </View>
+                          <View style={{ flexDirection: "row" }}>
+                            <TextInput
+                              textColor="#000"
+                              borderColor="#000"
+                              placeholder="Weight"
+                              activeBorderColor="#000"
+                              returnKeyType={"next"}
+                              style={{
+                                width: "47%",
+                                backgroundColor: "#F2F2F2",
+                                height: 39,
+                                borderRadius: 20,
+                                padding: 8,
+                              }}
+                              value={authInputs.weight.value}
+                              onChangeText={(value) => {
+                                this.onInputChange({
+                                  field: "weight",
+                                  value,
+                                  obj: "authInputs",
+                                });
+                              }}
+                            />
+                            <Text
+                              style={{
+                                textAlign: "center",
+                                alignSelf: "center",
+                              }}
+                            >
+                              kg
+                            </Text>
+                          </View>
                         </View>
-                        <View
-                          style={{
-                            backgroundColor: "#F0F8FF",
-                            borderRadius: 14,
-                            marginTop: 10,
-                          }}
-                        >
-                          <View style={{ marginHorizontal: 7, marginTop: 5 }}>
-                            <View
+
+                        <View style={{ width: "100%", marginTop: 5 }}>
+                          <Form>
+                            <Text
                               style={{
-                                flexDirection: "row",
-                                alignItems: "center",
+                                fontFamily: "Poppins-Regular",
+                                marginTop: 4,
+                                fontSize: 14,
                               }}
                             >
-                              <Text style={styles.cardText}>STATUS</Text>
-                            </View>
+                              Rate you health status?
+                            </Text>
+                            <Item picker>
+                              <Picker
+                                mode="dropdown"
+                                style={{ width: 250, fontWeight: "bold" }}
+                                placeholderStyle={{ color: "#bfc6ea" }}
+                                placeholderIconColor="#007aff"
+                                selectedValue={this.state.status}
+                                onValueChange={(itemValue) => {
+                                  this.setState({ status: itemValue });
+                                }}
+                              >
+                                <Picker.Item label="Select an option" />
+                                <Picker.Item label="Bad" value="Bad" />
+                                <Picker.Item label="Good" value="Good" />
+                                <Picker.Item
+                                  label="Very Good"
+                                  value="Very Good"
+                                />
+                                <Picker.Item label="Awesome" value="Awesome" />
+                              </Picker>
+                            </Item>
 
-                            <View style={{ flexDirection: "row" }}>
-                              <View style={{ flexDirection: "row" }}>
-                                <RadioButton
-                                  value="GOOD"
-                                  color="#000000"
-                                  status={
-                                    this.state.status === "good"
-                                      ? "checked"
-                                      : "unchecked"
-                                  }
-                                  onPress={() =>
-                                    this.setState({ status: "good" })
-                                  }
-                                />
-                                <Text
-                                  style={{
-                                    fontSize: 18,
-                                    fontFamily: "Poppins-Regular",
-                                    marginTop: 5,
-                                  }}
-                                >
-                                  GOOD
-                                </Text>
-                              </View>
-                              <View style={{ flexDirection: "row" }}>
-                                <RadioButton
-                                  value="NORMAL"
-                                  color="#000000"
-                                  status={
-                                    this.state.status === "normal"
-                                      ? "checked"
-                                      : "unchecked"
-                                  }
-                                  onPress={() =>
-                                    this.setState({ status: "normal" })
-                                  }
-                                />
-                                <Text
-                                  style={{
-                                    fontSize: 18,
-                                    fontFamily: "Poppins-Regular",
-                                    textAlign: "center",
-                                    marginTop: 5,
-                                  }}
-                                >
-                                  NORMAL
-                                </Text>
-                              </View>
-                              <View style={{ flexDirection: "row" }}>
-                                <RadioButton
-                                  value="BAD"
-                                  color="#000000"
-                                  status={
-                                    this.state.status === "bad"
-                                      ? "checked"
-                                      : "unchecked"
-                                  }
-                                  onPress={() =>
-                                    this.setState({ status: "bad" })
-                                  }
-                                />
-                                <Text
-                                  style={{
-                                    fontSize: 18,
-                                    fontFamily: "Poppins-Regular",
-                                    textAlign: "center",
-                                    marginTop: 5,
-                                  }}
-                                >
-                                  BAD
-                                </Text>
-                              </View>
-                            </View>
-                          </View>
-
-                          <View style={{ marginHorizontal: 7 }}>
-                            <View
+                            <Text
                               style={{
-                                flexDirection: "row",
-                                alignItems: "center",
+                                fontFamily: "Poppins-Regular",
+                                marginTop: 4,
+                                fontSize: 14,
                               }}
                             >
-                              <Text style={styles.cardText}>
-                                CHRONIC DISEASE
-                              </Text>
-                            </View>
+                              Chronic Medical Condition
+                            </Text>
+                            <Item picker>
+                              <Picker
+                                mode="dropdown"
+                                style={{ width: 250, fontWeight: "bold" }}
+                                placeholderIconColor="#007aff"
+                                selectedValue={this.state.chronic}
+                                onValueChange={(itemValue) => {
+                                  this.setState({ chronic: itemValue });
+                                }}
+                              >
+                                <Picker.Item label="Select an option" />
+                                <Picker.Item label="None" value="None" />
+                                <Picker.Item label="Epilesy" value="Epilesy" />
+                                <Picker.Item
+                                  label="Diabetes"
+                                  value="Diabetes"
+                                />
+                                <Picker.Item
+                                  label="Heart Disease"
+                                  value="Heart Disease"
+                                />
+                                <Picker.Item label="Cancer" value="Cancer" />
+                                <Picker.Item label="Stroke" value="Stroke" />
+                                <Picker.Item
+                                  label="Kidney Disease"
+                                  value="Kidney Disease"
+                                />
+                                <Picker.Item
+                                  label="Alzheimer's"
+                                  value="Alzheimer's"
+                                />
+                              </Picker>
+                            </Item>
 
-                            <View style={{ flexDirection: "row" }}>
-                              <View style={{ flexDirection: "row" }}>
-                                <RadioButton
-                                  label="YES"
-                                  value="YES"
-                                  color="#000000"
-                                  status={
-                                    this.state.chronic === true
-                                      ? "checked"
-                                      : "unchecked"
-                                  }
-                                  onPress={() =>
-                                    this.setState({ chronic: true })
-                                  }
-                                />
-                                <Text
-                                  style={{
-                                    fontSize: 18,
-                                    fontFamily: "Poppins-Regular",
-                                    marginTop: 5,
-                                  }}
-                                >
-                                  YES
-                                </Text>
-                              </View>
-                              <View style={{ flexDirection: "row" }}>
-                                <RadioButton
-                                  value="NO"
-                                  color="#000000"
-                                  status={
-                                    this.state.chronic === false
-                                      ? "checked"
-                                      : "unchecked"
-                                  }
-                                  onPress={() =>
-                                    this.setState({ chronic: false })
-                                  }
-                                />
-                                <Text
-                                  style={{
-                                    fontSize: 18,
-                                    fontFamily: "Poppins-Regular",
-                                    textAlign: "center",
-                                    marginTop: 5,
-                                  }}
-                                >
-                                  NO
-                                </Text>
-                              </View>
-                            </View>
-                          </View>
-                          <View style={{ marginHorizontal: 7, marginTop: 5 }}>
-                            <View
+                            <Text
                               style={{
-                                flexDirection: "row",
-                                alignItems: "center",
+                                fontFamily: "Poppins-Regular",
+                                marginTop: 4,
+                                fontSize: 14,
+                                marginTop: 12,
+                                marginBottom: 10,
                               }}
                             >
-                              <Text style={styles.cardText}>
-                                RESPIRATORY DISORDER
-                              </Text>
-                            </View>
+                              Briefly describe your health condition ?
+                            </Text>
 
-                            <View style={{ flexDirection: "row" }}>
-                              <View style={{ flexDirection: "row" }}>
-                                <RadioButton
-                                  value="GOOD"
-                                  color="#000000"
-                                  status={
-                                    this.state.respiratory === "good"
-                                      ? "checked"
-                                      : "unchecked"
-                                  }
-                                  onPress={() =>
-                                    this.setState({ respiratory: "good" })
-                                  }
-                                />
-                                <Text
-                                  style={{
-                                    fontSize: 18,
-                                    fontFamily: "Poppins-Regular",
-                                    marginTop: 5,
-                                  }}
-                                >
-                                  GOOD
-                                </Text>
-                              </View>
-                              <View style={{ flexDirection: "row" }}>
-                                <RadioButton
-                                  value="NORMAL"
-                                  color="#000000"
-                                  status={
-                                    this.state.respiratory === "normal"
-                                      ? "checked"
-                                      : "unchecked"
-                                  }
-                                  onPress={() =>
-                                    this.setState({ respiratory: "normal" })
-                                  }
-                                />
-                                <Text
-                                  style={{
-                                    fontSize: 18,
-                                    fontFamily: "Poppins-Regular",
-                                    textAlign: "center",
-                                    marginTop: 5,
-                                  }}
-                                >
-                                  NORMAL
-                                </Text>
-                              </View>
-                              <View style={{ flexDirection: "row" }}>
-                                <RadioButton
-                                  value="BAD"
-                                  color="#000000"
-                                  status={
-                                    this.state.respiratory === "bad"
-                                      ? "checked"
-                                      : "unchecked"
-                                  }
-                                  onPress={() =>
-                                    this.setState({ respiratory: "bad" })
-                                  }
-                                />
-                                <Text
-                                  style={{
-                                    fontSize: 18,
-                                    fontFamily: "Poppins-Regular",
-                                    textAlign: "center",
-                                    marginTop: 5,
-                                  }}
-                                >
-                                  BAD
-                                </Text>
-                              </View>
-                            </View>
-                          </View>
-
-                          <View style={{ marginHorizontal: 7, marginTop: 5 }}>
-                            <View
-                              style={{
-                                flexDirection: "row",
-                                alignItems: "center",
+                            <Textarea
+                              rowSpan={4}
+                              bordered
+                              placeholder="description should be brief..."
+                              value={this.state.healthDesc}
+                              onChangeText={(itemValue) => {
+                                this.setState({ healthDesc: itemValue });
                               }}
-                            >
-                              <Text style={styles.cardText}>ALLERGIES</Text>
-                            </View>
-
-                            <View style={{ flexDirection: "row" }}>
-                              <View style={{ flexDirection: "row" }}>
-                                <RadioButton
-                                  label="YES"
-                                  value="YES"
-                                  color="#000000"
-                                  status={
-                                    this.state.allergies === true
-                                      ? "checked"
-                                      : "unchecked"
-                                  }
-                                  onPress={() =>
-                                    this.setState({ allergies: true })
-                                  }
-                                />
-                                <Text
-                                  style={{
-                                    fontSize: 18,
-                                    fontFamily: "Poppins-Regular",
-                                    marginTop: 5,
-                                  }}
-                                >
-                                  YES
-                                </Text>
-                              </View>
-                              <View style={{ flexDirection: "row" }}>
-                                <RadioButton
-                                  value="NO"
-                                  color="#000000"
-                                  status={
-                                    this.state.allergies === false
-                                      ? "checked"
-                                      : "unchecked"
-                                  }
-                                  onPress={() =>
-                                    this.setState({ allergies: false })
-                                  }
-                                />
-                                <Text
-                                  style={{
-                                    fontSize: 18,
-                                    fontFamily: "Poppins-Regular",
-                                    textAlign: "center",
-                                    marginTop: 5,
-                                  }}
-                                >
-                                  NO
-                                </Text>
-                              </View>
-                            </View>
-                          </View>
+                            />
+                          </Form>
                         </View>
 
                         <View
@@ -1077,8 +836,8 @@ export default class SignUp extends Component {
                       source={require("../../assets/images/bgShape.png")}
                       style={{
                         justifyContent: "flex-start",
-                        width: 210,
-                        height: 150,
+                        width: 150,
+                        height: 90,
                       }}
                     />
                     <View style={{ marginTop: 40 }}>
@@ -1118,7 +877,7 @@ export default class SignUp extends Component {
                             error={this.renderError(
                               "authInputs",
                               "nationalID",
-                              "name"
+                              "nationalID"
                             )}
                             returnKeyType={"next"}
                             value={authInputs.nationalID.value}
@@ -1160,7 +919,7 @@ export default class SignUp extends Component {
                                   borderColor: "#32527B",
                                 },
                               ]}
-                              onPress={() => handlePress(3)}
+                              onPress={() => handlePress(2)}
                             >
                               <Text
                                 style={[styles.btnText, { color: "#32527B" }]}
@@ -1246,7 +1005,7 @@ const styles = StyleSheet.create({
     fontFamily: "Poppins-Regular",
   },
   cardText: {
-    fontSize: 18,
+    fontSize: 15,
     fontFamily: "Poppins-Regular",
   },
 });

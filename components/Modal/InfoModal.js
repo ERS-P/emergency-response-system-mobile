@@ -12,7 +12,7 @@ import {
   Share,
   Alert,
 } from "react-native";
-import AsyncStorage from "@react-native-async-storage/async-storage";
+// import AsyncStorage from "@react-native-async-storage/async-storage";
 import Comments from "./Comments";
 import renderIf from "../renderIf";
 import { data } from "../../jsonData/index";
@@ -110,31 +110,31 @@ export default class InfoModal extends Component {
     this.props.toggle();
   }
 
-  _retrieveData = async () => {
-    try {
-      const value = await AsyncStorage.getItem("admin");
-      const id = await AsyncStorage.getItem("userID");
-      const name = await AsyncStorage.getItem("name");
+  // _retrieveData = async () => {
+  //   try {
+  //     const value = await AsyncStorage.getItem("admin");
+  //     const id = await AsyncStorage.getItem("userID");
+  //     const name = await AsyncStorage.getItem("name");
 
-      if (value !== null) {
-        var result = value == "true";
-        this.setState({ admin: result, userId: id, userfirstname: name });
-        var data = this.props.dataClick.score;
+  //     if (value !== null) {
+  //       var result = value == "true";
+  //       this.setState({ admin: result, userId: id, userfirstname: name });
+  //       var data = this.props.dataClick.score;
 
-        var Scorecount = 0;
-        for (var key in data) {
-          if (key == id) {
-            this.setState({ selected: "up" });
-          }
-          Scorecount++;
-        }
-        this.setState({ upVotes: Scorecount });
-      }
-    } catch (error) {}
-  };
+  //       var Scorecount = 0;
+  //       for (var key in data) {
+  //         if (key == id) {
+  //           this.setState({ selected: "up" });
+  //         }
+  //         Scorecount++;
+  //       }
+  //       this.setState({ upVotes: Scorecount });
+  //     }
+  //   } catch (error) {}
+  // };
 
   componentWillMount() {
-    this._retrieveData();
+    // this._retrieveData();
   }
 
   addUserComment() {

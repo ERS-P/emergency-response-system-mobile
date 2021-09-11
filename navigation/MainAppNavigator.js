@@ -13,6 +13,9 @@ import PostEmergencyMap from "../screens/MainApp/PostEmergency/PostEmergencyMap"
 import PostEmergencyScreen from "../screens/MainApp/PostEmergency/PostEmergencyScreen";
 import PostEmergencyInfo from "../screens/MainApp/PostEmergency/PostEmergencyInfo";
 import PostEmergencySubmit from "../screens/MainApp/PostEmergency/PostEmergencySubmit.js";
+import NewsFeed from "../screens/MainApp/NewsFeed";
+import Tips from "../screens/MainApp/TipsScreen";
+import TrackRespondents from "../screens/MainApp/TrackRespondents";
 
 const tabBarIcon = (name) => ({ focused, color, size }) => (
   <MaterialCommunityIcons
@@ -31,6 +34,8 @@ const AccountStack = () => {
       <Stack.Screen name="edit_profile" component={EditProfile} />
       <Stack.Screen name="change_password" component={ChangePassword} />
       <Stack.Screen name="notification" component={NotificationScreen} />
+      <Stack.Screen name="progress" component={TrackRespondents} />
+      <Stack.Screen name="tips" component={Tips} />
     </Stack.Navigator>
   );
 };
@@ -63,11 +68,19 @@ const MainAppNavigator = () => {
       />
       <Tab.Screen
         options={{
-          tabBarIcon: tabBarIcon("post"),
+          tabBarIcon: tabBarIcon("newspaper-variant-multiple-outline"),
+        }}
+        name="News"
+        component={NewsFeed}
+      />
+      <Tab.Screen
+        options={{
+          tabBarIcon: tabBarIcon("alert-box"),
         }}
         name="Post"
         component={PostEmergencyStack}
       />
+
       <Tab.Screen
         options={{
           tabBarIcon: tabBarIcon("account"),

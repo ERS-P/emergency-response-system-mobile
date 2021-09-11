@@ -11,7 +11,7 @@ export default function PageHeader({ pageTitle, optionHandler }) {
         flexDirection: "row",
         justifyContent: "space-between",
         alignItems: "center",
-        paddingTop: 40,
+        paddingTop: 15,
         paddingBottom: 10,
         paddingRight: 10,
         backgroundColor: "#32527B",
@@ -26,12 +26,12 @@ export default function PageHeader({ pageTitle, optionHandler }) {
             padding: 10,
           }}
         >
-          <SimpleLineIcons name={"arrow-left"} size={20} color={"#ffffff"} />
+          <SimpleLineIcons name={"arrow-left"} size={16} color={"#ffffff"} />
         </TouchableOpacity>
         <View>
           <Text
             style={{
-              fontSize: 22,
+              fontSize: 17,
               fontFamily: "Poppins-Regular",
               color: "#ffffff",
             }}
@@ -40,9 +40,17 @@ export default function PageHeader({ pageTitle, optionHandler }) {
           </Text>
         </View>
       </View>
-      <TouchableOpacity onPress={optionHandler}>
-        <SimpleLineIcons name="options-vertical" size={18} color={"#ffffff"} />
-      </TouchableOpacity>
+      {optionHandler != "" ? (
+        <TouchableOpacity onPress={optionHandler}>
+          <SimpleLineIcons
+            name="options-vertical"
+            size={12}
+            color={"#ffffff"}
+          />
+        </TouchableOpacity>
+      ) : (
+        <View></View>
+      )}
     </View>
   );
 }

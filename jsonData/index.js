@@ -280,7 +280,7 @@ export const EmergencyData = [
   {
     id: 4,
     title: "First-Aid",
-    type: "first-aid",
+    type: "first_aid",
     icon: require("../assets/images/main/first_aid.png"),
     color: "#32527B",
   },

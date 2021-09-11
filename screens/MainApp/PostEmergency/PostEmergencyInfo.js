@@ -5,16 +5,16 @@ import {
   StyleSheet,
   TouchableOpacity,
   Image,
-  TextInput,
   ScrollView,
   KeyboardAvoidingView,
   Keyboard,
   TouchableWithoutFeedback,
 } from "react-native";
+import { Textarea, Form } from "native-base";
 import * as ImagePicker from "expo-image-picker";
 import PageHeader from "../../../components/PageHeader";
 import { RadioButton } from "react-native-paper";
-import { Ionicons, Fontisto } from "@expo/vector-icons";
+import { Ionicons, MaterialCommunityIcons } from "@expo/vector-icons";
 
 class PostEmergencyInfo extends Component {
   constructor(props) {
@@ -22,16 +22,13 @@ class PostEmergencyInfo extends Component {
     this.state = {
       LocalImage: null,
       renderphoto: false,
-      damages: true,
+      damages: null,
       description: "",
       type: this.props.route.params.type,
       title: "",
     };
   }
   _pickImage = async () => {
-    this.setState({
-      mode: false,
-    });
     // Ask the user for the permission to access the camera
     const permissionResult = await ImagePicker.requestCameraPermissionsAsync();
 
@@ -47,22 +44,46 @@ class PostEmergencyInfo extends Component {
         LocalImage: result.uri,
       });
     }
+    this.setState({
+      renderphoto: true,
+    });
   };
+
+  componentDidMount() {
+    if (this.state.type === "fire") {
+      this.setState({ title: "Fire Emergency reported at Legon" });
+    } else if ((this.state.type = "flood")) {
+      this.setState({ title: "Flood Emergency reported at Legon" });
+    } else if ((this.state.type = "violence")) {
+      this.setState({
+        title: "Violence reported on Legon campus",
+      });
+    } else if ((this.state.type = "first_aid")) {
+      this.setState({
+        title: "First aid needed urgently on Legon campus",
+      });
+    } else if ((this.state.type = "accident")) {
+      this.setState({
+        title: "Vehicle accident reported on Legon campus",
+      });
+    }
+  }
 
   render() {
     return (
       <View style={styles.container}>
         <PageHeader pageTitle={"Description"} />
         <ScrollView showsVerticalScrollIndicator={false}>
-          <View style={{ marginHorizontal: 7 }}>
-            <View style={styles.card}>
+          <View style={{ marginHorizontal: 19, marginVertical: 15 }}>
+            <View style={{ flexDirection: "row", marginBottom: 10 }}>
               <View style={{ flexDirection: "row", alignItems: "center" }}>
-                <Fontisto
-                  name="persons"
+                <Ionicons
+                  name="ios-person-circle-sharp"
+                  size={30}
                   color="black"
-                  size={25}
-                  style={{ marginRight: 10 }}
+                  style={{ marginRight: 4 }}
                 />
+
                 <Text style={styles.cardText}>Human Damages</Text>
               </View>
 
@@ -114,70 +135,102 @@ class PostEmergencyInfo extends Component {
                 <Ionicons
                   name="ios-camera"
                   size={25}
-                  style={{ marginRight: 10 }}
+                  style={{ marginRight: 40 }}
                 />
                 <Text style={styles.cardText}>Add a photo or a video feed</Text>
               </View>
               <View></View>
             </TouchableOpacity>
             <View style={{ marginHorizontal: 2, alignSelf: "center" }}>
-              {this.state.renderphoto === true ? (
-                <View></View>
+              {this.state.renderphoto === false ? (
+                <>
+                  <Text
+                    style={{
+                      textAlign: "center",
+                      fontStyle: "italic",
+                      fontFamily: "Poppins-Regular",
+                      marginVertical: 20,
+                    }}
+                  >
+                    Image will be placed here
+                  </Text>
+                </>
               ) : (
-                <View style={styles.imgcontainer}>
-                  <View style={{ alignSelf: "center" }}>
-                    {this.state.LocalImage && (
-                      <Image
-                        source={{ uri: this.state.LocalImage }}
-                        style={{ width: 340, height: 180 }}
-                      />
-                    )}
+                <>
+                  <View style={styles.imgcontainer}>
+                    <View style={{ alignSelf: "center" }}>
+                      {this.state.LocalImage && (
+                        <Image
+                          source={{ uri: this.state.LocalImage }}
+                          style={{ width: 310, height: 200 }}
+                        />
+                      )}
+                    </View>
                   </View>
-                </View>
+                  <TouchableOpacity
+                    style={{
+                      padding: 9,
+                      flexDirection: "row",
+                      alignSelf: "flex-end",
+                      marginRight: 5,
+                      backgroundColor: "#5D88BB",
+                    }}
+                    onPress={this._pickImage}
+                  >
+                    <MaterialCommunityIcons
+                      name="camera-retake"
+                      size={24}
+                      color="#FFF"
+                      style={{ alignSelf: "center" }}
+                    />
+                    <Text
+                      style={{
+                        color: "#FFF",
+                        fontFamily: "Poppins-Regular",
+                        marginLeft: 3,
+                        textAlign: "center",
+                      }}
+                    >
+                      Retake
+                    </Text>
+                  </TouchableOpacity>
+                </>
               )}
             </View>
-            <ScrollView showsVerticalScrollIndicator={false}>
-              <View style={{ marginHorizontal: 2 }}>
-                <Text style={{ fontFamily: "Poppins-Regular", fontSize: 18 }}>
-                  Emergency Title
-                </Text>
-                <TextInput
-                  backgroundColor={"#FFFFFF"}
-                  style={{ height: 45 }}
-                  onChangeText={(text) =>
-                    this.setState({
-                      title: text,
-                    })
-                  }
-                />
-              </View>
-              <View style={{ marginHorizontal: 2 }}>
-                <KeyboardAvoidingView style={{ flex: 0 }} behavior="padding">
-                  <TouchableWithoutFeedback
-                    style={{ flex: 1 }}
-                    onPress={() => Keyboard.dismiss()}
-                  >
-                    <>
-                      <Text
-                        style={{ fontFamily: "Poppins-Regular", fontSize: 18 }}
-                      >
-                        Add a description to the emergency
-                      </Text>
-                      <TextInput
-                        multiline={true}
-                        numberOfLines={4}
-                        backgroundColor={"#FFFFFF"}
-                        onChangeText={(text) =>
-                          this.setState({
-                            description: text,
-                          })
-                        }
+
+            <View style={{ marginHorizontal: 2 }}>
+              <KeyboardAvoidingView style={{ flex: 0 }} behavior="padding">
+                <TouchableWithoutFeedback
+                  style={{ flex: 1 }}
+                  onPress={() => Keyboard.dismiss()}
+                >
+                  <>
+                    <Text
+                      style={{
+                        fontFamily: "Poppins-Regular",
+                        fontSize: 14,
+                        marginTop: 6,
+                      }}
+                    >
+                      Add a description to the emergency
+                    </Text>
+                    <Form>
+                      <Textarea
+                        rowSpan={6}
+                        bordered
+                        style={{ borderRadius: 9.5 }}
+                        backgroundColor={"#FFF"}
+                        placeholder="description should be brief..."
+                        value={this.state.description}
+                        onChangeText={(val) => {
+                          this.setState({ description: val });
+                        }}
                       />
-                    </>
-                  </TouchableWithoutFeedback>
-                </KeyboardAvoidingView>
-              </View>
-            </ScrollView>
+                    </Form>
+                  </>
+                </TouchableWithoutFeedback>
+              </KeyboardAvoidingView>
+            </View>
 
             <View
               style={{
@@ -208,6 +261,7 @@ class PostEmergencyInfo extends Component {
                 </Text>
               </TouchableOpacity>
             </View>
+            <View style={{ marginTop: 50 }}></View>
           </View>
         </ScrollView>
       </View>
@@ -226,9 +280,10 @@ const styles = StyleSheet.create({
     justifyContent: "space-between",
     alignItems: "center",
     paddingHorizontal: 10,
-    paddingVertical: 15,
+    paddingVertical: 10,
     marginVertical: 5,
     marginHorizontal: 1,
+    marginRight: 30,
     borderRadius: 2,
     backgroundColor: "#FFFFFF",
     shadowColor: "#000",
@@ -241,16 +296,27 @@ const styles = StyleSheet.create({
     elevation: 1,
   },
   cardText: {
-    fontSize: 15,
+    fontSize: 17,
     fontFamily: "Poppins-Regular",
   },
   imgcontainer: {
-    marginHorizontal: 1,
-    marginBottom: 20,
+    marginHorizontal: 8,
+    marginBottom: 10,
+    borderWidth: 5,
+    borderColor: "#5D88BB",
+    borderRadius: 2,
+    shadowColor: "#000",
+    shadowOffset: {
+      width: 0,
+      height: 0.2,
+    },
+    shadowOpacity: 0.1,
+    shadowRadius: 0.26,
+    elevation: 0.5,
   },
   btn: {
-    padding: 10,
-    width: "45%",
+    padding: 9,
+    width: "44%",
     marginTop: 20,
     borderRadius: 5,
   },

@@ -102,7 +102,7 @@ const AccountScreen = ({ navigation, route }) => {
             }}
           >
             <Text
-              style={{ color: "#FFFFFF", fontSize: 12, textAlign: "center" }}
+              style={{ color: "#FFFFFF", fontSize: 10, textAlign: "center" }}
             >
               6
             </Text>
@@ -110,7 +110,10 @@ const AccountScreen = ({ navigation, route }) => {
         </View>
       </ProfileButton>
 
-      <ProfileButton style={{ margin: 2 }}>
+      <ProfileButton
+        style={{ margin: 2 }}
+        onPress={() => navigation.navigate("tips")}
+      >
         <Icon name="cube" />
         <Wrapper>
           <Title>Emergency Tips</Title>
@@ -127,12 +130,24 @@ const AccountScreen = ({ navigation, route }) => {
             }}
           >
             <Text
-              style={{ color: "#FFFFFF", fontSize: 12, textAlign: "center" }}
+              style={{ color: "#FFFFFF", fontSize: 10, textAlign: "center" }}
             >
               2
             </Text>
           </View>
         </View>
+      </ProfileButton>
+
+      <ProfileButton
+        style={{ margin: 2 }}
+        onPress={() =>
+          navigation.navigate("progress")
+        }
+      >
+        <Icon name="map-marker" />
+        <Wrapper>
+          <Title>Track Progress</Title>
+        </Wrapper>
       </ProfileButton>
 
       <ProfileButton

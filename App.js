@@ -3,6 +3,7 @@ import { StatusBar, StyleSheet, View, Dimensions } from "react-native";
 import { NavigationContainer } from "@react-navigation/native";
 import useCachedResources from "./hooks/useCachedResources";
 import AppStack from "./navigation/MainAppNavigator";
+import ModalContextProvider from "./context/ModalContext";
 
 export default function App() {
   const isLoadingComplete = useCachedResources();
@@ -13,9 +14,11 @@ export default function App() {
     return (
       <View style={styles.container}>
         <StatusBar barStyle="light-content" backgroundColor={"#32527B"} />
-        <NavigationContainer>
-          <AppStack />
-        </NavigationContainer>
+        <ModalContextProvider>
+          <NavigationContainer>
+            <AppStack />
+          </NavigationContainer>
+        </ModalContextProvider>
       </View>
     );
   }

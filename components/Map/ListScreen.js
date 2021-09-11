@@ -10,10 +10,10 @@ import firebase from "firebase";
 const markerImages = {
   flood: require("../../assets/images/types/flood.png"),
   fire: require("../../assets/images/main/fire.png"),
-  // first-aid:
-  // violence:,
-  // accident:,
   other: require("../../assets/images/main/alert.png"),
+  accident: require("../../assets/images/main/accident.png"),
+  first_aid: require("../../assets/images/main/first aid.png"),
+  violence: require("../../assets/images/main/violence1.png"),
 };
 
 

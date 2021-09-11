@@ -15,6 +15,9 @@ const markerImages = {
   flood: require("../../assets/images/types/flood.png"),
   fire: require("../../assets/images/main/fire.png"),
   other: require("../../assets/images/main/alert.png"),
+  accident: require("../../assets/images/main/accident.png"),
+  first_aid: require("../../assets/images/main/first aid.png"),
+  violence: require("../../assets/images/main/violence1.png"),
 };
 
 var location;
@@ -164,7 +167,7 @@ export default class MapScreen extends Component {
         //Start the timer
         this.setState({ loaded: true });
       }.bind(this),
-      5000
+      4000
     );
   }
 

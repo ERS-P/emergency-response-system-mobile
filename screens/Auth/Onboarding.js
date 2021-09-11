@@ -70,7 +70,7 @@ export default function OnboardingScreen() {
               </Text>
               <Button
                 bgColor="#32527B"
-                title="Skip"
+                title="Next"
                 pressHandler={() => handlePress(1)}
               />
             </View>
@@ -109,7 +109,7 @@ export default function OnboardingScreen() {
               </Text>
               <Button
                 bgColor="#32527B"
-                title="Skip"
+                title="Next"
                 pressHandler={() => handlePress(2)}
               />
             </View>

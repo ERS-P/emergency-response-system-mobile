@@ -79,8 +79,8 @@ const validationDictionary = {
   phone: {
     presence: { allowEmpty: false, message: "^is required" },
     format: {
-      pattern: /^[2-9]\d{2}-\d{3}-\d{4}$/,
-      message: "^Phone number must be valid",
+      pattern: "^(([0-9]*)|(([0-9]*)\.([0-9]*)))$",
+      message: "^ must be valid",
     },
   },
 
